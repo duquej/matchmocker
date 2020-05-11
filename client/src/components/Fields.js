@@ -67,9 +67,7 @@ export class Fields extends Component {
       })
       .catch(() => {
         this.setState({ loading: false });
-        Message.error(
-          "Unable to sign up at the moment. Please try again later"
-        );
+        Message.error("Unable to sign in");
       });
   };
 
@@ -83,7 +81,10 @@ export class Fields extends Component {
           initialValues={{ remember: true }}
           onFinish={this.onFinish}
         >
-          <Button type="primary"> Sign in with Google</Button>
+          <Button type="primary" htmlType="submit">
+            {" "}
+            Sign in with Google
+          </Button>
         </Form>
       </React.Fragment>
     );
