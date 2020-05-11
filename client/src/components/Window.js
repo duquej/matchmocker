@@ -22,7 +22,8 @@ function Window() {
 
       <div className="content" style={{ textAlign: "center" }}>
         <h3>
-          Jonathan has accepted your request to a mock interview at 2:30 PM!
+          Jonathan has accepted your request for a mock interview at 2:30 PM on
+          5/11/2020!
         </h3>
         <p>
           Zoom Link:
