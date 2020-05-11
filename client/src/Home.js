@@ -6,9 +6,7 @@ import { BellTwoTone } from "@ant-design/icons";
 
 import Window from "./components/Window";
 import Fields from "./components/Fields";
-import DashboardApp from "./Dashboard";
 import "./App.css";
-import { Route } from "react-router-dom";
 
 //RE-ENABLE ONCE FIGURED OUT
 
