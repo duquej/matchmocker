@@ -27,7 +27,19 @@ app.get(
   })
 );
 
+const authCheck = (req, res, next) => {
+  if (!req.user) {
+    res.redirect("/");
+  } else {
+    next();
+  }
+};
+
 app.get("/auth/redirect", passport.authenticate("google"), (req, res) => {
+  res.redirect("/dashboard");
+});
+
+app.get("/user", (req, res) => {
   res.send(req.user);
 });
 
