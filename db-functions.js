@@ -2,23 +2,26 @@ let firebase = require("./functions/db-config");
 
 const db = firebase.admin.firestore();
 
-async function checkIfUserIDExists(userID) {
-  const userRef = await db
+async function returnUserFromUserID(userID) {
+  const userData = await db
     .collection("users")
+    .doc(userID)
     .get()
-    .then((querySnapshot) => {
-      querySnapshot.forEach((doc) => {
-        if (doc.googleID === userID) {
-          return true;
-        }
-      });
+    .then((doc) => {
+      if (!doc.exists) {
+        console.log("user not found, doc doesnt exist");
+        return undefined;
+      }
+
+      const data = doc.data();
+      return data;
     });
 
-  return false;
+  return userData;
 }
 
 async function handleUserLogin(id, displayName, profilePicLink, email) {
-  const userRef = await db.collection("users").doc(email);
+  const userRef = await db.collection("users").doc(id);
   userRef
     .set(
       {
@@ -38,6 +41,6 @@ async function handleUserLogin(id, displayName, profilePicLink, email) {
 }
 
 module.exports = {
-  checkIfUserIDExists,
+  returnUserFromUserID,
   handleUserLogin,
 };

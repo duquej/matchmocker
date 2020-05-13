@@ -7,7 +7,14 @@ passport.serializeUser((userID, done) => {
 });
 
 passport.deserializeUser((userID, done) => {
-  functions.checkIfUserIDExists(userID).then(done(null, userID));
+  functions
+    .returnUserFromUserID(userID)
+    .then((user) => {
+      done(null, user);
+    })
+    .catch((err) => {
+      console.log("an error has occured.");
+    });
 });
 
 passport.use(
