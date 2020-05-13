@@ -4,10 +4,21 @@ const cors = require("cors");
 const passportSetup = require("./configs/passport-setup");
 const passport = require("passport");
 const path = require("path");
+const cookieSession = require("cookie-session");
 
 app.use(cors());
 
 app.use(express.static(path.join(__dirname, "client/build")));
+
+app.use(
+  cookieSession({
+    maxAge: 24 * 60 * 60 * 1000,
+    keys: ["johnappletoestee"],
+  })
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.get(
   "/api/google",
@@ -16,7 +27,9 @@ app.get(
   })
 );
 
-app.get("/auth/redirect", passport.authenticate("google"), (req, res) => {});
+app.get("/auth/redirect", passport.authenticate("google"), (req, res) => {
+  res.send(req.user);
+});
 
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname + "/client/build/index.html"));

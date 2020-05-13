@@ -1,5 +1,14 @@
 const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20");
+const functions = require("../db-functions.js");
+
+passport.serializeUser((userID, done) => {
+  done(null, userID);
+});
+
+passport.deserializeUser((userID, done) => {
+  functions.checkIfUserIDExists(userID).then(done(null, userID));
+});
 
 passport.use(
   new GoogleStrategy(
@@ -10,7 +19,18 @@ passport.use(
       callbackURL: "/auth/redirect",
     },
     (accessToken, refreshToken, profile, done) => {
-      console.log(profile);
+      const profileJson = profile._json;
+      functions
+        .handleUserLogin(
+          profileJson.sub,
+          profileJson.name,
+          profileJson.picture,
+          profileJson.email
+        )
+        .then(done(null, profileJson.sub))
+        .catch((err) =>
+          console.log("An error has occured handling user login")
+        );
     }
   )
 );
