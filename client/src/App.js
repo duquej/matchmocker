@@ -4,6 +4,8 @@ import React, { Component } from "react";
 import { Route, BrowserRouter, Switch } from "react-router-dom";
 import Home from "./Home";
 import Dashboard from "./Dashboard";
+import UserProvider from "./contexts/UserProvider";
+import { ProtectedRoute } from "./ProtectedRouter";
 
 class App extends Component {
   constructor() {
@@ -17,19 +19,10 @@ class App extends Component {
     return (
       <div className="app">
         <BrowserRouter>
-          <Switch>
-            <Route
-              exact
-              path="/"
-              render={(props) => (
-                <Home
-                  {...props}
-                  loggedInStatus={this.props.loggedInStatus}
-                ></Home>
-              )}
-            ></Route>
+          <UserProvider>
+            <Route exact path="/" component={Home}></Route>
             <Route exact path="/dashboard" component={Dashboard}></Route>
-          </Switch>
+          </UserProvider>
         </BrowserRouter>
       </div>
     );

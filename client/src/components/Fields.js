@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { Form, Input, Button, Tooltip, message as Message } from "antd";
-import { InfoCircleOutlined } from "@ant-design/icons";
 
 import "./Fields.css";
 

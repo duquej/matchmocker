@@ -27,20 +27,26 @@ app.get(
   })
 );
 
-const authCheck = (req, res, next) => {
-  if (!req.user) {
-    res.redirect("/");
-  } else {
-    next();
-  }
-};
-
 app.get("/auth/redirect", passport.authenticate("google"), (req, res) => {
   res.redirect("/dashboard");
 });
 
 app.get("/user", (req, res) => {
+  console.log("user called...");
   res.send(req.user);
+});
+
+app.get("/", (req, res) => {
+  console.log("called.");
+  if (req.user) {
+    res.redirect("/dashboard");
+  }
+});
+
+app.get("/logout", (req, res) => {
+  console.log("logout link called.");
+  req.logout();
+  res.redirect("/");
 });
 
 app.get("*", (req, res) => {

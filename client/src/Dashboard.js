@@ -1,14 +1,26 @@
-import React, { Component } from "react";
+import React, { useContext, useState } from "react";
+import UserProvider from "./contexts/UserProvider";
+import _ from "lodash";
 
-class Dashboard extends Component {
-  state = {};
-  render() {
-    return (
-      <div>
-        <h1>hey</h1>
-      </div>
-    );
-  }
-}
+const LoginMsg =
+  "Uh oh, there's nothing to show! " +
+  "Login to see how much of your invaluable personal " +
+  "data tech companies have at their disposal.";
 
-export default Dashboard;
+const Profile = () => {
+  const [selected, setSelected] = useState("All");
+  const userData = useContext(UserProvider.context);
+  const text = _.isEmpty(userData) ? LoginMsg : "Explore Your Data";
+
+  return (
+    <div className="page">
+      <p className="page-title" style={{ textAlign: "center" }}>
+        {text}
+      </p>
+
+      <div style={{ marginBottom: 20 }} />
+    </div>
+  );
+};
+
+export default Profile;
