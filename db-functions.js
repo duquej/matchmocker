@@ -40,7 +40,47 @@ async function handleUserLogin(id, displayName, profilePicLink, email) {
     });
 }
 
+async function handleNewInterviewRequest(
+  email,
+  googleID,
+  introduction,
+  datetime,
+  name,
+  topic,
+  slanguage,
+  planguage,
+  zoomlink,
+  doclink
+) {
+  const requestsRef = await db.collection("requests").doc(googleID);
+  requestsRef.set({ googleID: googleID, email: email }, { merge: true });
+  requestsRef
+    .collection("userrequests")
+    .doc(datetime)
+    .set({
+      email: email,
+      googleID: googleID,
+      introduction: introduction,
+      datetime: datetime,
+      name: name,
+      topic: topic,
+      slanguage: slanguage,
+      planguage: planguage,
+      zoomlink: zoomlink,
+      doclink: doclink,
+      fullfilled: false,
+    })
+    .then(() => {
+      requestsRef.update();
+    })
+    .catch((err) => {
+      console.log("handleNewInterviewRequest error occured: ");
+      console.log(err);
+    });
+}
+
 module.exports = {
   returnUserFromUserID,
   handleUserLogin,
+  handleNewInterviewRequest,
 };

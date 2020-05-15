@@ -5,6 +5,7 @@ const passportSetup = require("./configs/passport-setup");
 const passport = require("passport");
 const path = require("path");
 const cookieSession = require("cookie-session");
+const functions = require("./db-functions.js");
 
 app.use(cors());
 
@@ -47,6 +48,10 @@ app.get("/logout", (req, res) => {
   console.log("logout link called.");
   req.logout();
   res.redirect("/");
+});
+
+app.get("/api/addRequest", (req, res) => {
+  res.send("hi");
 });
 
 app.get("*", (req, res) => {
