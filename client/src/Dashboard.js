@@ -12,9 +12,15 @@ import {
   LaptopOutlined,
   NotificationOutlined,
 } from "@ant-design/icons";
+import MyInterviews from "./components/MyInterviews";
 
 const { SubMenu } = Menu;
 const { Header, Content, Sider } = Layout;
+
+//<InterviewForm
+//             googleID={userData.googleID}
+//             email={userData.email}
+//           ></InterviewForm>
 
 const LoginMsg =
   "Uh oh, there's nothing to show! " +
@@ -68,10 +74,11 @@ const Profile = () => {
               minHeight: 280,
             }}
           >
-            <InterviewForm
+            <MyInterviews
               googleID={userData.googleID}
               email={userData.email}
-            ></InterviewForm>
+              username={userData.username}
+            ></MyInterviews>
           </Content>
         </Layout>
       </Layout>
