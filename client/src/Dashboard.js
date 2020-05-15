@@ -68,7 +68,10 @@ const Profile = () => {
               minHeight: 280,
             }}
           >
-            <InterviewForm></InterviewForm>
+            <InterviewForm
+              googleID={userData.googleID}
+              email={userData.email}
+            ></InterviewForm>
           </Content>
         </Layout>
       </Layout>

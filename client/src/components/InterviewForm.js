@@ -12,8 +12,6 @@ import {
 import { InfoCircleOutlined } from "@ant-design/icons";
 import axios from "axios";
 
-const { MonthPicker, RangePicker } = DatePicker;
-
 const { Option } = Select;
 
 const layout = {
@@ -26,30 +24,23 @@ const layout = {
 };
 
 class InterviewForm extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      loading: false,
-      email: props.email,
-      googleID: props.googleID,
-      introduction: "",
-      datetime: "",
-      name: "",
-      topic: "",
-      slanguage: "",
-      planguage: "",
-      zoomlink: "",
-      doclink: "",
-    };
-  }
+  state = {
+    loading: false,
+    email: this.props.email,
+    googleID: this.props.googleID,
+    introduction: "",
+    datetime: "",
+    name: "",
+    topic: "",
+    slanguage: "",
+    planguage: "",
+    zoomlink: "",
+    doclink: "",
+  };
 
   onFinish = () => {
     this.setState({ loading: true });
-    console.log(this.state);
     const {
-      email,
-      googleID,
       introduction,
       datetime,
       name,
@@ -61,16 +52,22 @@ class InterviewForm extends Component {
     } = this.state;
     axios
       .get(
-        `/api/addRequest?email=${email}&introduction=${introduction}&datetime=${datetime}&googleID=${googleID}&name=${name}&topic=${topic}&slanguage=${slanguage}&planguage=${planguage}&zoomlink=${zoomlink}&doclink=${doclink}`
+        `/api/addRequest?email=${this.props.email}&introduction=${introduction}&datetime=${datetime}&googleID=${this.props.googleID}&name=${name}&topic=${topic}&slanguage=${slanguage}&planguage=${planguage}&zoomlink=${zoomlink}&doclink=${doclink}`
       )
       .then((res) => {
         this.setState({ loading: false });
 
-        Message.success("Request successfully published!");
+        if (res.data.success === false) {
+          Message.error(
+            "There was an error trying to publish your interview requst. Please try again later."
+          );
+        } else {
+          Message.success("Request successfully published!");
+        }
       })
       .catch((err) => {
         Message.error(
-          "There was an error trying to publish your interview requst. Please try again later."
+          "There was an error trying to reach the server. Please try again later."
         );
       });
   };
@@ -78,7 +75,7 @@ class InterviewForm extends Component {
   render() {
     return (
       <div>
-        <h2 {...layout}>Request an Interview</h2>
+        <h2 {...layout}>Request an Interview </h2>
         <Divider></Divider>
         <Form
           {...layout}
@@ -116,10 +113,12 @@ class InterviewForm extends Component {
           >
             <Select
               placeholder="Select interview topic"
-              onBlur={(e) => this.setState({ topic: e })}
+              onChange={(e) => {
+                this.setState({ topic: e });
+              }}
             >
-              <Option value="datastructures">Data Structures</Option>
-              <Option value="dynamicprogramming">Dynamic Programming</Option>
+              <Option value="Data Structures">Data Structures</Option>
+              <Option value="Dynamic Programming">Dynamic Programming</Option>
             </Select>
           </Form.Item>
 
@@ -134,11 +133,13 @@ class InterviewForm extends Component {
           >
             <Select
               placeholder="Select language spoken"
-              onBlur={(e) => this.setState({ topic: e })}
+              onChange={(e) => {
+                this.setState({ slanguage: e });
+              }}
             >
-              <Option value="english">English</Option>
-              <Option value="spanish">Spanish</Option>
-              <Option value="mandarin">Mandarin</Option>
+              <Option value="English">English</Option>
+              <Option value="Spanish">Spanish</Option>
+              <Option value="Mandarin">Mandarin</Option>
             </Select>
           </Form.Item>
 
@@ -154,13 +155,13 @@ class InterviewForm extends Component {
           >
             <Select
               placeholder="Select programming language"
-              onBlur={(e) => this.setState({ topic: e })}
+              onChange={(e) => this.setState({ planguage: e })}
             >
-              <Option value="java">Java</Option>
-              <Option value="python">Python</Option>
-              <Option value="c++">C++</Option>
-              <Option value="c#">C#</Option>
-              <Option value="javascript">javascript</Option>
+              <Option value="Java">Java</Option>
+              <Option value="Python">Python</Option>
+              <Option value="C++">C++</Option>
+              <Option value="C#">C#</Option>
+              <Option value="Javascript">javascript</Option>
             </Select>
           </Form.Item>
 
@@ -175,7 +176,9 @@ class InterviewForm extends Component {
             ]}
           >
             <Input
-              onBlur={(e) => this.setState({ zoomlink: e.target.value })}
+              onBlur={(e) => {
+                this.setState({ zoomlink: e.target.value });
+              }}
             ></Input>
           </Form.Item>
 
@@ -212,7 +215,9 @@ class InterviewForm extends Component {
             rules={[{ required: true, message: "Please pick a time and date" }]}
           >
             <DatePicker
-              onBlur={(e) => this.setState({ datetime: e._i })}
+              onChange={(e) => {
+                this.setState({ datetime: e._i });
+              }}
               showTime
               format="YYYY-MM-DD HH:mm"
             />

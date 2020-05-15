@@ -52,6 +52,8 @@ async function handleNewInterviewRequest(
   zoomlink,
   doclink
 ) {
+  console.log("zoomlink data:");
+  console.log(zoomlink);
   const requestsRef = await db.collection("requests").doc(googleID);
   requestsRef.set({ googleID: googleID, email: email }, { merge: true });
   requestsRef
@@ -70,9 +72,7 @@ async function handleNewInterviewRequest(
       doclink: doclink,
       fullfilled: false,
     })
-    .then(() => {
-      requestsRef.update();
-    })
+    .then(() => {})
     .catch((err) => {
       console.log("handleNewInterviewRequest error occured: ");
       console.log(err);

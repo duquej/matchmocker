@@ -45,13 +45,43 @@ app.get("/", (req, res) => {
 });
 
 app.get("/logout", (req, res) => {
-  console.log("logout link called.");
   req.logout();
   res.redirect("/");
 });
 
 app.get("/api/addRequest", (req, res) => {
-  res.send("hi");
+  const {
+    email,
+    googleID,
+    introduction,
+    datetime,
+    name,
+    topic,
+    slanguage,
+    planguage,
+    zoomlink,
+    doclink,
+  } = req.query;
+  functions
+    .handleNewInterviewRequest(
+      email,
+      googleID,
+      introduction,
+      datetime,
+      name,
+      topic,
+      slanguage,
+      planguage,
+      zoomlink,
+      doclink
+    )
+    .then((msg) => {
+      res.send({ success: true });
+    })
+    .catch((err) => {
+      console.log(err);
+      res.send({ success: false, message: err });
+    });
 });
 
 app.get("*", (req, res) => {
