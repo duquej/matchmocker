@@ -20,9 +20,10 @@ class App extends Component {
       <div className="app">
         <BrowserRouter>
           <UserProvider>
-            <Route exact path="/" component={Home}></Route>
-            <Route exact path="/dashboard" component={Dashboard}></Route>
+            <Route path="/dashboard" component={Dashboard}></Route>
           </UserProvider>
+
+          <Route exact path="/" component={Home}></Route>
         </BrowserRouter>
       </div>
     );

@@ -49,6 +49,30 @@ app.get("/logout", (req, res) => {
   res.redirect("/");
 });
 
+app.get("/api/deleteRequest", (req, res) => {
+  const { docID, googleID } = req.query;
+  functions
+    .deleteUserInterviewRequest(docID, googleID)
+    .then((data) => {
+      res.send({ success: true, data: data });
+    })
+    .catch((err) => {
+      res.send({ success: false, message: err });
+    });
+});
+
+app.get("/api/getAllRequests", (req, res) => {
+  const { googleID } = req.query;
+  functions
+    .getAllUserRequestsFromID(googleID)
+    .then((resp) => {
+      res.send({ success: true, data: resp });
+    })
+    .catch((err) => {
+      res.send({ success: false, message: err });
+    });
+});
+
 app.get("/api/addRequest", (req, res) => {
   const {
     email,

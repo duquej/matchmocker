@@ -1,15 +1,14 @@
 import React, { Component } from "react";
-import { List, Typography, Divider } from "antd";
+import { List, Typography, Divider, message as Message } from "antd";
 import "./PendingInterviews.js";
+import Axios from "axios";
 const { Text } = Typography;
 
-const data = [
-  "Java Interview on 5/20/2020 at 9:30 PM",
-  "Python Interview at 8pm",
-];
-
 class PendingInterviews extends Component {
-  state = {};
+  state = {
+    morphedData: false,
+  };
+
   render() {
     return (
       <div>
@@ -17,20 +16,31 @@ class PendingInterviews extends Component {
         <h2>Pending Interviews</h2>
         <List
           bordered
-          loading={false}
-          dataSource={data}
+          loading={this.props.loading}
+          dataSource={this.props.pendingInterviews}
           renderItem={(item) => (
             <List.Item
               actions={[
-                <a key="list-loadmore-edit">edit</a>,
-                <a key="list-delete">delete</a>,
+                <a
+                  key="list-loadmore-edit"
+                  href={`/api/editRequest?docID=${item.datetime}&googleID=${this.props.googleID}`}
+                >
+                  edit
+                </a>,
+                <a
+                  key="list-delete"
+                  onClick={() => {
+                    this.props.onDelete(this.props.googleID, item.datetime);
+                  }}
+                >
+                  delete
+                </a>,
                 <a key="list-loadmore-more">more</a>,
               ]}
             >
               <div>
-                <Text type="danger">[Pending] </Text>
-
-                {item}
+                <Text type="danger">[Unfullfilled] </Text>
+                {item.topic} Interview at {item.datetime}
               </div>
             </List.Item>
           )}

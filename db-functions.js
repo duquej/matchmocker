@@ -40,6 +40,51 @@ async function handleUserLogin(id, displayName, profilePicLink, email) {
     });
 }
 
+async function deleteUserInterviewRequest(docID, googleID) {
+  const userRef = await db.collection("requests").doc(googleID);
+  const updatedRequests = userRef
+    .collection("userrequests")
+    .get()
+    .then((querySnapshot) => {
+      querySnapshot.forEach(async (doc) => {
+        if (doc.id === docID) {
+          console.log("document deleted");
+          doc.ref.delete().catch((err) => {
+            console.log(err);
+          });
+        }
+      });
+
+      //This could be optimized.
+      return querySnapshot.docs
+        .map((doc) => {
+          return doc.data();
+        })
+        .filter((doc) => {
+          doc.datetime != docID;
+        });
+    })
+    .catch((err) => {
+      console.log(erro);
+    });
+
+  return updatedRequests;
+}
+
+async function getAllUserRequestsFromID(googleID) {
+  const requestsRef = await db.collection("requests").doc(googleID);
+  const allInterviewRequestsMade = requestsRef
+    .collection("userrequests")
+    .get()
+    .then((querySnapshot) => {
+      const allData = querySnapshot.docs.map((doc) => {
+        return doc.data();
+      });
+      return allData;
+    });
+  return allInterviewRequestsMade;
+}
+
 async function handleNewInterviewRequest(
   email,
   googleID,
@@ -71,6 +116,7 @@ async function handleNewInterviewRequest(
       zoomlink: zoomlink,
       doclink: doclink,
       fullfilled: false,
+      completed: false,
     })
     .then(() => {})
     .catch((err) => {
@@ -83,4 +129,6 @@ module.exports = {
   returnUserFromUserID,
   handleUserLogin,
   handleNewInterviewRequest,
+  getAllUserRequestsFromID,
+  deleteUserInterviewRequest,
 };

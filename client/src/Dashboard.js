@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import UserProvider from "./contexts/UserProvider";
 import _ from "lodash";
 import InterviewForm from "./components/InterviewForm";
+import { Route, Switch, useRouteMatch, Link, Router } from "react-router-dom";
 
 import "antd/dist/antd.css";
 import "./Dashboard.css";
@@ -17,11 +18,6 @@ import MyInterviews from "./components/MyInterviews";
 const { SubMenu } = Menu;
 const { Header, Content, Sider } = Layout;
 
-//<InterviewForm
-//             googleID={userData.googleID}
-//             email={userData.email}
-//           ></InterviewForm>
-
 const LoginMsg =
   "Uh oh, there's nothing to show! " +
   "Login to see how much of your invaluable personal " +
@@ -31,6 +27,7 @@ const Profile = () => {
   const [selected, setSelected] = useState("All");
   const userData = useContext(UserProvider.context);
   const text = userData.username;
+  let match = useRouteMatch();
 
   return (
     <Layout>
@@ -42,9 +39,17 @@ const Profile = () => {
           defaultSelectedKeys={["1"]}
           style={{ float: "right" }}
         >
-          <Menu.Item key="1">dashboard</Menu.Item>
+          <Menu.Item key="1">
+            <Link to={`/dashboard`} className="nav-text">
+              dashboard
+            </Link>
+          </Menu.Item>
           <Menu.Item key="2">interview listings</Menu.Item>
-          <Menu.Item key="3">make post</Menu.Item>
+          <Menu.Item key="3">
+            <Link to={`/dashboard/request`} className="nav-text">
+              make a post
+            </Link>
+          </Menu.Item>
           <Menu.Item key="4">contact us</Menu.Item>
         </Menu>
       </Header>
@@ -74,11 +79,30 @@ const Profile = () => {
               minHeight: 280,
             }}
           >
-            <MyInterviews
-              googleID={userData.googleID}
-              email={userData.email}
-              username={userData.username}
-            ></MyInterviews>
+            <Switch>
+              <Route
+                path={`/dashboard/request`}
+                render={() => (
+                  <InterviewForm
+                    email={userData.email}
+                    googleID={userData.googleID}
+                  ></InterviewForm>
+                )}
+              />
+
+              <Route
+                path={`${match.path}`}
+                render={() => (
+                  <MyInterviews
+                    googleID={userData.googleID}
+                    email={userData.email}
+                    username={userData.username}
+                    userImage={userData.profilePic}
+                    test={true}
+                  ></MyInterviews>
+                )}
+              />
+            </Switch>
           </Content>
         </Layout>
       </Layout>
