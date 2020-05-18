@@ -7,12 +7,8 @@ import { Route, Switch, useRouteMatch, Link, Router } from "react-router-dom";
 import "antd/dist/antd.css";
 import "./Dashboard.css";
 
-import { Layout, Menu, Breadcrumb } from "antd";
-import {
-  UserOutlined,
-  LaptopOutlined,
-  NotificationOutlined,
-} from "@ant-design/icons";
+import { Layout, Menu } from "antd";
+import { UserOutlined } from "@ant-design/icons";
 import MyInterviews from "./components/MyInterviews";
 
 const { SubMenu } = Menu;
@@ -36,16 +32,16 @@ const Profile = () => {
         <Menu
           theme="dark"
           mode="horizontal"
-          defaultSelectedKeys={["1"]}
+          defaultSelectedKeys={["dashboard"]}
           style={{ float: "right" }}
         >
-          <Menu.Item key="1">
+          <Menu.Item key="dashboard">
             <Link to={`/dashboard`} className="nav-text">
               dashboard
             </Link>
           </Menu.Item>
-          <Menu.Item key="2">interview listings</Menu.Item>
-          <Menu.Item key="3">
+          <Menu.Item key="listings">interview listings</Menu.Item>
+          <Menu.Item key="request">
             <Link to={`/dashboard/request`} className="nav-text">
               request an interview
             </Link>

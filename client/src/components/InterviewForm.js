@@ -215,11 +215,12 @@ class InterviewForm extends Component {
             rules={[{ required: true, message: "Please pick a time and date" }]}
           >
             <DatePicker
-              onChange={(e) => {
-                this.setState({ datetime: e._i });
+              onChange={(dateObj, dateString) => {
+                console.log(dateString);
+                this.setState({ datetime: dateString });
               }}
-              showTime
-              format="MM-DD-YYYY HH:mm"
+              showTime={{ use12Hours: true, format: "hh:mm a" }}
+              format="MM-DD-YYYY hh:mm a"
             />
           </Form.Item>
 
