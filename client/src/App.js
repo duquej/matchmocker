@@ -7,6 +7,7 @@ import Dashboard from "./Dashboard";
 import UserProvider from "./contexts/UserProvider";
 import { ProtectedRoute } from "./ProtectedRouter";
 import Withprotected from "./Withprotected";
+import Intermediary from "./Intermediary";
 
 class App extends Component {
   constructor() {
@@ -21,13 +22,9 @@ class App extends Component {
       <div className="app">
         <BrowserRouter>
           <UserProvider>
-            <Withprotected
-              path="/dashboard"
-              component={Dashboard}
-            ></Withprotected>
+            <Route path="/dashboard" component={Dashboard}></Route>
+            <Route exact path="/" component={Intermediary}></Route>
           </UserProvider>
-
-          <Route exact path="/" component={Home}></Route>
         </BrowserRouter>
       </div>
     );
