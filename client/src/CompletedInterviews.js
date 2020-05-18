@@ -1,22 +1,18 @@
 import React, { Component } from "react";
-import { List, Typography, Divider } from "antd";
-import "./PendingInterviews.js";
+import { List, Typography } from "antd";
+
 const { Text } = Typography;
 
-class PendingInterviews extends Component {
-  state = {
-    morphedData: false,
-  };
-
+class CompletedInterviews extends Component {
+  state = {};
   render() {
     return (
       <div>
-        <Divider orientation="left"></Divider>
-        <h2>Pending Interviews</h2>
+        <h2>Completed Interviews</h2>
         <List
           bordered
           loading={this.props.loading}
-          dataSource={this.props.pendingInterviews}
+          dataSource={this.props.completedInterviews}
           renderItem={(item) => (
             <List.Item
               actions={[
@@ -49,4 +45,4 @@ class PendingInterviews extends Component {
   }
 }
 
-export default PendingInterviews;
+export default CompletedInterviews;

@@ -4,6 +4,7 @@ import { message as Message } from "antd";
 import "./MyInterviews.css";
 import PendingInterviews from "./PendingInterviews";
 import Axios from "axios";
+import CompletedInterviews from "../CompletedInterviews";
 
 class MyInterviews extends Component {
   constructor(props) {
@@ -80,13 +81,14 @@ class MyInterviews extends Component {
   render() {
     return (
       <div className="center">
-        <h2>Welcome, {this.props.username} </h2>
+        <h2>Welcome, {this.props.username}! </h2>
         <PendingInterviews
           loading={this.state.loading}
           pendingInterviews={this.state.pendingInterviews}
           googleID={this.props.googleID}
           onDelete={this.onDelete}
         ></PendingInterviews>
+        <CompletedInterviews></CompletedInterviews>
       </div>
     );
   }

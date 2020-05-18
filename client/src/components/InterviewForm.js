@@ -219,7 +219,7 @@ class InterviewForm extends Component {
                 this.setState({ datetime: e._i });
               }}
               showTime
-              format="YYYY-MM-DD HH:mm"
+              format="MM-DD-YYYY HH:mm"
             />
           </Form.Item>
 

@@ -47,10 +47,11 @@ const Profile = () => {
           <Menu.Item key="2">interview listings</Menu.Item>
           <Menu.Item key="3">
             <Link to={`/dashboard/request`} className="nav-text">
-              make a post
+              request an interview
             </Link>
           </Menu.Item>
           <Menu.Item key="4">contact us</Menu.Item>
+          <Menu.Item key="5">submit issue</Menu.Item>
         </Menu>
       </Header>
       <Layout>
@@ -66,7 +67,11 @@ const Profile = () => {
               icon={<UserOutlined />}
               title={userData.username}
             >
-              <Menu.Item key="1">Logout</Menu.Item>
+              <Menu.Item key="2">
+                <Link to={`/logout`} className="nav-text">
+                  logout
+                </Link>
+              </Menu.Item>
             </SubMenu>
           </Menu>
         </Sider>

@@ -61,7 +61,8 @@ async function deleteUserInterviewRequest(docID, googleID) {
           return doc.data();
         })
         .filter((doc) => {
-          doc.datetime != docID;
+          console.log(doc.datetime != docID);
+          return doc.datetime != docID;
         });
     })
     .catch((err) => {

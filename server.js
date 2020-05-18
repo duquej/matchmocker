@@ -39,9 +39,9 @@ app.get("/user", (req, res) => {
 
 app.get("/", (req, res) => {
   console.log("called.");
-  if (req.user) {
-    res.redirect("/dashboard");
-  }
+  //if (req.user) {
+  //  res.redirect("/dashboard");
+  //}
 });
 
 app.get("/logout", (req, res) => {
@@ -54,6 +54,7 @@ app.get("/api/deleteRequest", (req, res) => {
   functions
     .deleteUserInterviewRequest(docID, googleID)
     .then((data) => {
+      console.log(data);
       res.send({ success: true, data: data });
     })
     .catch((err) => {
