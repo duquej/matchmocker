@@ -50,13 +50,10 @@ app.get("/logout", (req, res) => {
 });
 
 app.get("/api/getAllRequests", (req, res) => {
-  functions
-    .getAllUnfullfilledRequests()
-    .then((data) => {
-      console.log(data);
-      res.send({ success: true, data: data });
-    })
-    .catch((err) => res.send({ success: false, message: err }));
+  functions.getAllUnfullfilledRequests().then((data) => {
+    console.log(data);
+    res.send({ success: true, data: data });
+  });
 });
 
 app.get("/api/getRequest", (req, res) => {
@@ -84,7 +81,7 @@ app.get("/api/deleteRequest", (req, res) => {
     });
 });
 
-app.get("/api/getAllRequests", (req, res) => {
+app.get("/api/getAllUserRequests", (req, res) => {
   const { googleID } = req.query;
   functions
     .getAllUserRequestsFromID(googleID)

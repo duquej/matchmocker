@@ -73,32 +73,35 @@ async function deleteUserInterviewRequest(docID, googleID) {
 }
 
 async function getAllUnfullfilledRequests() {
-  const requestsRefData = await db.collection("requests").get();
-  requestsRefData
+  const requestsRefData = await db
+    .collection("requests")
+    .get()
     .then((querySnapshot) => {
       var allAvailableRequests = [];
-
-      querySnapshot.forEach(async (userDoc) => {
-        const userRequestsRefData = await userDoc.ref
-          .collection("userrequests")
-          .where("fullfilled", "==", false)
-          .get();
-
-        userRequestsRefData.then((requestsSnap) => {
-          requestsSnap.forEach((request) => {
-            allAvailableRequests.push(request.data());
-          });
+      return new Promise((resolve, reject) => {
+        querySnapshot.forEach(async (userDoc) => {
+          const userRequestsRefData = await userDoc.ref
+            .collection("userrequests")
+            .where("fullfilled", "==", false)
+            .get()
+            .then((requestsSnap) => {
+              requestsSnap.forEach((request) => {
+                allAvailableRequests.push(request.data());
+              });
+              resolve(allAvailableRequests);
+            })
+            .catch((err) => {
+              reject(err); //
+            });
         });
       });
-
-      console.log(allAvailableRequests);
     })
 
     .catch((err) => {
       console.log(err);
     });
 
-  return allInterviewData;
+  return requestsRefData;
 }
 
 async function getSpecificInterviewRequest(googleID, docID) {

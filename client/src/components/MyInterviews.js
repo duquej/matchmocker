@@ -66,7 +66,7 @@ class MyInterviews extends Component {
     if (this.props.googleID === undefined) {
       return;
     }
-    Axios.get(`/api/getAllRequests?googleID=${googleID}`).then((res) => {
+    Axios.get(`/api/getAllUserRequests?googleID=${googleID}`).then((res) => {
       if (res.data.success === false) {
         Message.error(
           "An error occured trying to retrieve your interview requests"
