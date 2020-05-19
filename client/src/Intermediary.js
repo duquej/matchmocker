@@ -11,10 +11,11 @@ const Intermediary = () => {
   const [selected, setSelected] = useState("All");
   const userData = useContext(UserProvider.context);
   const isAuthenticated = !_.isEmpty(userData);
+  let properComp = isAuthenticated ? <Dashboard></Dashboard> : <Home></Home>;
 
   let match = useRouteMatch();
 
-  return isAuthenticated ? <Dashboard></Dashboard> : <Home></Home>;
+  return properComp;
 };
 
 export default Intermediary;

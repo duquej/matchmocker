@@ -12,7 +12,7 @@ class PendingInterviews extends Component {
     return (
       <div>
         <Divider orientation="left"></Divider>
-        <h2>Pending Interviews</h2>
+        <h2>My Pending Interviews</h2>
         <List
           bordered
           loading={this.props.loading}
@@ -34,11 +34,20 @@ class PendingInterviews extends Component {
                 >
                   delete
                 </a>,
-                <a key="list-loadmore-more">more</a>,
+                <a
+                  key="list-loadmore-more"
+                  href={`/dashboard/displayRequest?googleID=${this.props.googleID}&docID=${item.datetime}`}
+                >
+                  more
+                </a>,
               ]}
             >
               <div>
-                <Text type="danger">[Unfullfilled] </Text>
+                {!item.fullfilled ? (
+                  <Text type="danger"> [Unfullfilled] </Text>
+                ) : (
+                  <Text>[Accepted] </Text>
+                )}
                 {item.topic} Interview at {item.datetime}
               </div>
             </List.Item>

@@ -10,6 +10,8 @@ import "./Dashboard.css";
 import { Layout, Menu } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 import MyInterviews from "./components/MyInterviews";
+import DisplayRequest from "./components/DisplayRequest";
+import InterviewListings from "./components/InterviewListings";
 
 const { SubMenu } = Menu;
 const { Header, Content, Sider } = Layout;
@@ -40,7 +42,11 @@ const Profile = () => {
               dashboard
             </Link>
           </Menu.Item>
-          <Menu.Item key="listings">interview listings</Menu.Item>
+          <Menu.Item key="listings">
+            <Link to={`/dashboard/listings`} className="nav-text">
+              interview listings
+            </Link>
+          </Menu.Item>
           <Menu.Item key="request">
             <Link to={`/dashboard/request`} className="nav-text">
               request an interview
@@ -88,6 +94,28 @@ const Profile = () => {
                     email={userData.email}
                     googleID={userData.googleID}
                   ></InterviewForm>
+                )}
+              />
+
+              <Route
+                path={`/dashboard/listings`}
+                render={() => (
+                  <InterviewListings
+                    name={userData.username}
+                    email={userData.email}
+                    googleID={userData.googleID}
+                  ></InterviewListings>
+                )}
+              ></Route>
+
+              <Route
+                path={`/dashboard/displayRequest`}
+                render={() => (
+                  <DisplayRequest
+                    name={userData.username}
+                    email={userData.email}
+                    googleID={userData.googleID}
+                  ></DisplayRequest>
                 )}
               />
 

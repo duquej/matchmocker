@@ -72,6 +72,49 @@ async function deleteUserInterviewRequest(docID, googleID) {
   return updatedRequests;
 }
 
+async function getAllUnfullfilledRequests() {
+  const requestsRefData = await db.collection("requests").get();
+  requestsRefData
+    .then((querySnapshot) => {
+      var allAvailableRequests = [];
+
+      querySnapshot.forEach(async (userDoc) => {
+        const userRequestsRefData = await userDoc.ref
+          .collection("userrequests")
+          .where("fullfilled", "==", false)
+          .get();
+
+        userRequestsRefData.then((requestsSnap) => {
+          requestsSnap.forEach((request) => {
+            allAvailableRequests.push(request.data());
+          });
+        });
+      });
+
+      console.log(allAvailableRequests);
+    })
+
+    .catch((err) => {
+      console.log(err);
+    });
+
+  return allInterviewData;
+}
+
+async function getSpecificInterviewRequest(googleID, docID) {
+  const requestRef = await db.collection("requests").doc(googleID);
+  const interviewRequest = requestRef
+    .collection("userrequests")
+    .doc(docID)
+    .get()
+    .then((docSnap) => {
+      if (docSnap.exists) {
+        return docSnap.data();
+      }
+    });
+  return interviewRequest;
+}
+
 async function getAllUserRequestsFromID(googleID) {
   const requestsRef = await db.collection("requests").doc(googleID);
   const allInterviewRequestsMade = requestsRef
@@ -132,4 +175,6 @@ module.exports = {
   handleNewInterviewRequest,
   getAllUserRequestsFromID,
   deleteUserInterviewRequest,
+  getSpecificInterviewRequest,
+  getAllUnfullfilledRequests,
 };
