@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { List, Typography, Divider } from "antd";
+import { List, Typography, Divider, Popconfirm } from "antd";
 import "./PendingInterviews.js";
 const { Text } = Typography;
 
@@ -26,14 +26,18 @@ class PendingInterviews extends Component {
                 >
                   edit
                 </a>,
-                <a
-                  key="list-delete"
-                  onClick={() => {
+
+                <Popconfirm
+                  title="Are you sure you want to delete this request?"
+                  onConfirm={() => {
                     this.props.onDelete(this.props.googleID, item.datetime);
                   }}
+                  okText="Yes"
+                  cancelText="No"
                 >
-                  delete
-                </a>,
+                  <a href="#">delete</a>
+                </Popconfirm>,
+
                 <a
                   key="list-loadmore-more"
                   href={`/dashboard/displayRequest?googleID=${this.props.googleID}&docID=${item.datetime}`}

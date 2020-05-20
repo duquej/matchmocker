@@ -1,16 +1,30 @@
 import React, { Component } from "react";
-import { Table, Tag, Space, Divider } from "antd";
+import { Table, Tag, Space, Divider, message as Message } from "antd";
+import Axios from "axios";
 
 class InterviewListings extends Component {
-  state = {};
+  state = {
+    loading: true,
+    interviewRequests: [],
+  };
 
+  componentDidMount() {
+    Axios.get(`/api/getAllRequests`)
+      .then((res) => {
+        const allData = res.data.data;
+        console.log(allData);
+        this.setState({ loading: false, interviewRequests: allData });
+      })
+      .catch((err) => {
+        Message.error("Could not fetch all interview requests");
+      });
+  }
   render() {
     const columns = [
       {
         title: "Name",
         dataIndex: "name",
         key: "name",
-        render: (text) => <a>{text}</a>,
       },
 
       {
@@ -19,22 +33,22 @@ class InterviewListings extends Component {
         key: "datetime",
       },
       {
-        title: "Tags",
-        key: "tags",
-        dataIndex: "tags",
-        render: (tags) => (
+        title: "Programming Language",
+        key: "planguage",
+        dataIndex: "planguage",
+      },
+
+      {
+        title: "Topic",
+        key: "topic",
+        dataIndex: ["topic"],
+        render: (tag) => (
           <>
-            {tags.map((tag) => {
-              let color = tag.length > 5 ? "geekblue" : "green";
-              if (tag === "loser") {
-                color = "volcano";
-              }
-              return (
-                <Tag color={color} key={tag}>
-                  {tag.toUpperCase()}
-                </Tag>
-              );
-            })}
+            {
+              <Tag color="blue" key={tag}>
+                {tag}
+              </Tag>
+            }
           </>
         ),
       },
@@ -43,31 +57,10 @@ class InterviewListings extends Component {
         key: "action",
         render: (text, record) => (
           <Space size="middle">
-            <a>Accept Request</a>
-            <a>View More</a>
+            <a>accept request</a>
+            <a>view more</a>
           </Space>
         ),
-      },
-    ];
-
-    const data = [
-      {
-        key: "1",
-        name: "Jonathan Duque",
-        datetime: "5/23/20 2:55 PM",
-        tags: ["Python", "Dynamic Programming"],
-      },
-      {
-        key: "2",
-        name: "Jim Green",
-        datetime: "5/25/20 1:55 PM",
-        tags: ["Java", "Data Structures"],
-      },
-      {
-        key: "3",
-        name: "Joe Black",
-        datetime: "6/23/20 1:25 PM",
-        tags: ["C++", "Anything"],
       },
     ];
 
@@ -75,7 +68,11 @@ class InterviewListings extends Component {
       <div>
         <h2>Interview Listings</h2>
         <Divider></Divider>
-        <Table columns={columns} dataSource={data} />
+        <Table
+          columns={columns}
+          dataSource={this.state.interviewRequests}
+          loading={this.state.loading}
+        />
       </div>
     );
   }
