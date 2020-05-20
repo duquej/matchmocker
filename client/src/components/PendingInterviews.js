@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { List, Typography, Divider } from "antd";
+import { List, Typography, Divider, Popconfirm } from "antd";
 import "./PendingInterviews.js";
 const { Text } = Typography;
 
@@ -12,7 +12,7 @@ class PendingInterviews extends Component {
     return (
       <div>
         <Divider orientation="left"></Divider>
-        <h2>Pending Interviews</h2>
+        <h2>My Pending Interviews</h2>
         <List
           bordered
           loading={this.props.loading}
@@ -26,19 +26,32 @@ class PendingInterviews extends Component {
                 >
                   edit
                 </a>,
-                <a
-                  key="list-delete"
-                  onClick={() => {
+
+                <Popconfirm
+                  title="Are you sure you want to delete this request?"
+                  onConfirm={() => {
                     this.props.onDelete(this.props.googleID, item.datetime);
                   }}
+                  okText="Yes"
+                  cancelText="No"
                 >
-                  delete
+                  <a href="#">delete</a>
+                </Popconfirm>,
+
+                <a
+                  key="list-loadmore-more"
+                  href={`/dashboard/displayRequest?googleID=${this.props.googleID}&docID=${item.datetime}`}
+                >
+                  more
                 </a>,
-                <a key="list-loadmore-more">more</a>,
               ]}
             >
               <div>
-                <Text type="danger">[Unfullfilled] </Text>
+                {!item.fullfilled ? (
+                  <Text type="danger"> [Unfullfilled] </Text>
+                ) : (
+                  <Text>[Accepted] </Text>
+                )}
                 {item.topic} Interview at {item.datetime}
               </div>
             </List.Item>

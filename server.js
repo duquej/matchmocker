@@ -49,6 +49,25 @@ app.get("/logout", (req, res) => {
   res.redirect("/");
 });
 
+app.get("/api/getAllRequests", (req, res) => {
+  functions.getAllUnfullfilledRequests().then((data) => {
+    console.log(data);
+    res.send({ success: true, data: data });
+  });
+});
+
+app.get("/api/getRequest", (req, res) => {
+  const { googleID, docID } = req.query;
+  functions
+    .getSpecificInterviewRequest(googleID, docID)
+    .then((data) => {
+      res.send({ success: true, data: data });
+    })
+    .catch((err) => {
+      res.send({ success: false, message: err });
+    });
+});
+
 app.get("/api/deleteRequest", (req, res) => {
   const { docID, googleID } = req.query;
   functions
@@ -62,7 +81,7 @@ app.get("/api/deleteRequest", (req, res) => {
     });
 });
 
-app.get("/api/getAllRequests", (req, res) => {
+app.get("/api/getAllUserRequests", (req, res) => {
   const { googleID } = req.query;
   functions
     .getAllUserRequestsFromID(googleID)
