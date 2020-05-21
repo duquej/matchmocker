@@ -67,9 +67,6 @@ app.get("/api/acceptRequest", (req, res) => {
       accepterName
     )
     .then((data) => {
-      //Send Email
-      //SENDGRID API KEY:  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
-
       res.send({ success: true });
     })
     .catch((err) => res.send({ success: false }));
