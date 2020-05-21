@@ -1,4 +1,5 @@
 let firebase = require("./functions/db-config");
+const emailUtil = require("./functions/email/email-user.js");
 
 const db = firebase.admin.firestore();
 
@@ -104,6 +105,59 @@ async function getAllUnfullfilledRequests() {
   return requestsRefData;
 }
 
+async function acceptUserRequest(
+  requesterGoogleID,
+  requesterDocID,
+  accepterEmail,
+  accepterGoogleID,
+  accepterName
+) {
+  const requestsRef = db.collection("requests");
+  const requesterRef = requestsRef
+    .doc(requesterGoogleID)
+    .collection("userrequests")
+    .doc(requesterDocID);
+
+  await requesterRef
+    .update({
+      fullfilled: true,
+      accepter: {
+        googleID: accepterGoogleID,
+        email: accepterEmail,
+        name: accepterName,
+      },
+    })
+    .catch((err) => console.log(err));
+
+  const requesterDocData = await requesterRef
+    .get()
+    .then((docSnap) => {
+      if (docSnap.exists) {
+        return docSnap.data();
+      } else {
+        throw "Requester Doc DNE";
+      }
+    })
+    .catch((err) => console.log(err));
+
+  const accepterRef = requestsRef.doc(accepterGoogleID);
+
+  await accepterRef.set(
+    { googleID: accepterGoogleID, email: accepterEmail },
+    { merge: true }
+  );
+  await accepterRef.collection("acceptedrequests").doc(requesterDocID).set({
+    requesterData: requesterDocData,
+  });
+
+  await emailUtil
+    .sendConfirmation(requesterDocData, true)
+    .then(() => sendConfirmation(requesterDocData, false))
+    .catch((err) => reject(err));
+
+  return true;
+}
+
 async function getSpecificInterviewRequest(googleID, docID) {
   const requestRef = await db.collection("requests").doc(googleID);
   const interviewRequest = requestRef
@@ -144,8 +198,6 @@ async function handleNewInterviewRequest(
   zoomlink,
   doclink
 ) {
-  console.log("zoomlink data:");
-  console.log(zoomlink);
   const requestsRef = await db.collection("requests").doc(googleID);
   requestsRef.set({ googleID: googleID, email: email }, { merge: true });
   requestsRef
@@ -180,4 +232,5 @@ module.exports = {
   deleteUserInterviewRequest,
   getSpecificInterviewRequest,
   getAllUnfullfilledRequests,
+  acceptUserRequest,
 };
