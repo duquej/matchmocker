@@ -6,6 +6,7 @@ import {
   Divider,
   message as Message,
   Popconfirm,
+  Alert,
 } from "antd";
 import Axios from "axios";
 
@@ -123,7 +124,16 @@ class InterviewListings extends Component {
 
     return (
       <div>
+        <Alert
+          message="Issues or suggestions? Contact us!"
+          description="If you encounter any issues or would like to see any changes, please either email me at jd849@cornell.edu or submit a github issue."
+          type="info"
+          showIcon
+          closable
+        />
+        <br></br>
         <h2>Interview Listings</h2>
+
         <Divider></Divider>
         <Table
           columns={columns}

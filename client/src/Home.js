@@ -2,7 +2,7 @@
 import React from "react";
 //import ReactGA from "react-ga";
 import { Layout, Divider } from "antd";
-import { BellTwoTone } from "@ant-design/icons";
+import { CalendarTwoTone } from "@ant-design/icons";
 
 import Window from "./components/Window";
 import Fields from "./components/Fields";
@@ -28,8 +28,8 @@ function Home() {
             style={{ padding: "25px 50px 85px 50px" }}
           >
             <h1>
-              <BellTwoTone /> Sign up to start practicing mock interviewing with
-              other students!
+              <CalendarTwoTone /> Match Mocker is a service that connects
+              software engineers together to practice for coding interviews.
             </h1>
             {/* Add Product Info */}
             <Window />

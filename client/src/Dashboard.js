@@ -12,6 +12,7 @@ import { UserOutlined } from "@ant-design/icons";
 import MyInterviews from "./components/MyInterviews";
 import DisplayRequest from "./components/DisplayRequest";
 import InterviewListings from "./components/InterviewListings";
+import FormSuccess from "./components/FormSuccess";
 
 const { SubMenu } = Menu;
 const { Header, Content, Sider } = Layout;
@@ -28,7 +29,7 @@ const Profile = () => {
   let match = useRouteMatch();
 
   return (
-    <Layout>
+    <Layout style={{ minHeight: "100vh" }}>
       <Header style={{ color: "#FFF", fontSize: "16px" }}>
         MatchMocker
         <Menu
@@ -65,6 +66,7 @@ const Profile = () => {
             mode="inline"
             defaultSelectedKeys={["1"]}
             defaultOpenKeys={["sub1"]}
+            //theme="dark"
             style={{ height: "100%", borderRight: 0 }}
           >
             <SubMenu
@@ -73,9 +75,7 @@ const Profile = () => {
               title={userData.username}
             >
               <Menu.Item key="2">
-                <Link to={`/logout`} className="nav-text">
-                  logout
-                </Link>
+                <a href="/logout">logout</a>
               </Menu.Item>
             </SubMenu>
           </Menu>
@@ -109,6 +109,11 @@ const Profile = () => {
                     googleID={userData.googleID}
                   ></InterviewListings>
                 )}
+              ></Route>
+
+              <Route
+                path={`/dashboard/formsuccess`}
+                render={() => <FormSuccess></FormSuccess>}
               ></Route>
 
               <Route
