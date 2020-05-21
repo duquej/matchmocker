@@ -104,6 +104,54 @@ async function getAllUnfullfilledRequests() {
   return requestsRefData;
 }
 
+async function acceptUserRequest(
+  requesterGoogleID,
+  requesterDocID,
+  accepterEmail,
+  accepterGoogleID,
+  accepterName
+) {
+  const requestsRef = db.collection("requests");
+  const requesterRef = requestsRef
+    .doc(requesterGoogleID)
+    .collection("userrequests")
+    .doc(requesterDocID);
+
+  await requesterRef
+    .update({
+      fullfilled: true,
+      accepter: {
+        googleID: accepterGoogleID,
+        email: accepterEmail,
+        name: accepterName,
+      },
+    })
+    .catch((err) => console.log(err));
+
+  const requesterDocData = await requesterRef
+    .get()
+    .then((docSnap) => {
+      if (docSnap.exists) {
+        return docSnap.data();
+      } else {
+        throw "Requester Doc DNE";
+      }
+    })
+    .catch((err) => console.log(err));
+
+  const accepterRef = requestsRef.doc(accepterGoogleID);
+
+  await accepterRef.set(
+    { googleID: accepterGoogleID, email: accepterEmail },
+    { merge: true }
+  );
+  await accepterRef.collection("acceptedrequests").doc(requesterDocID).set({
+    requesterData: requesterDocData,
+  });
+
+  return true;
+}
+
 async function getSpecificInterviewRequest(googleID, docID) {
   const requestRef = await db.collection("requests").doc(googleID);
   const interviewRequest = requestRef
@@ -180,4 +228,5 @@ module.exports = {
   deleteUserInterviewRequest,
   getSpecificInterviewRequest,
   getAllUnfullfilledRequests,
+  acceptUserRequest,
 };

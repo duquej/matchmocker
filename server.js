@@ -49,9 +49,34 @@ app.get("/logout", (req, res) => {
   res.redirect("/");
 });
 
+app.get("/api/acceptRequest", (req, res) => {
+  const {
+    requesterGoogleID,
+    requesterDocID,
+    accepterGoogleID,
+    accepterEmail,
+    accepterName,
+  } = req.query;
+
+  functions
+    .acceptUserRequest(
+      requesterGoogleID,
+      requesterDocID,
+      accepterEmail,
+      accepterGoogleID,
+      accepterName
+    )
+    .then((data) => {
+      //Send Email
+      //SENDGRID API KEY:  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
+
+      res.send({ success: true });
+    })
+    .catch((err) => res.send({ success: false }));
+});
+
 app.get("/api/getAllRequests", (req, res) => {
   functions.getAllUnfullfilledRequests().then((data) => {
-    console.log(data);
     res.send({ success: true, data: data });
   });
 });
