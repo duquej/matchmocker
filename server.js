@@ -49,6 +49,18 @@ app.get("/logout", (req, res) => {
   res.redirect("/");
 });
 
+app.get("/api/requestCompleted", (req, res) => {
+  const { requesterGoogleID, docID, accepterGoogleID } = req.query;
+  functions
+    .markRequestAsCompleted(docID, requesterGoogleID, accepterGoogleID)
+    .then((data) => {
+      res.send({ success: true });
+    })
+    .catch((err) => {
+      res.send({ success: false });
+    });
+});
+
 app.get("/api/acceptRequest", (req, res) => {
   const {
     requesterGoogleID,
@@ -95,7 +107,6 @@ app.get("/api/deleteRequest", (req, res) => {
   functions
     .deleteUserInterviewRequest(docID, googleID)
     .then((data) => {
-      console.log(data);
       res.send({ success: true, data: data });
     })
     .catch((err) => {

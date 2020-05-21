@@ -73,15 +73,37 @@ async function deleteUserInterviewRequest(docID, googleID) {
   return updatedRequests;
 }
 
+async function markRequestAsCompleted(
+  docID,
+  requesterGoogleID,
+  accepterGoogleID
+) {
+  const requestsRef = db.collection("requests");
+  await requestsRef
+    .doc(requesterGoogleID)
+    .collection("userrequests")
+    .doc(docID)
+    .update({ completed: true });
+
+  await requestsRef
+    .doc(accepterGoogleID)
+    .collection("acceptedrequests")
+    .doc(docID)
+    .update({ completed: true });
+
+  return true;
+}
+
 async function getAllUnfullfilledRequests() {
-  const requestsRefData = await db
+  const requestsRefData = db
     .collection("requests")
     .get()
     .then((querySnapshot) => {
       var allAvailableRequests = [];
+      var promises = [];
       return new Promise((resolve, reject) => {
         querySnapshot.forEach(async (userDoc) => {
-          const userRequestsRefData = await userDoc.ref
+          const userRequestsPromise = userDoc.ref
             .collection("userrequests")
             .where("fullfilled", "==", false)
             .get()
@@ -89,11 +111,16 @@ async function getAllUnfullfilledRequests() {
               requestsSnap.forEach((request) => {
                 allAvailableRequests.push(request.data());
               });
-              resolve(allAvailableRequests);
             })
             .catch((err) => {
               reject(err); //
             });
+
+          promises.push(userRequestsPromise);
+        });
+
+        Promise.all(promises).then((t) => {
+          resolve(allAvailableRequests);
         });
       });
     })
@@ -147,13 +174,16 @@ async function acceptUserRequest(
     { merge: true }
   );
   await accepterRef.collection("acceptedrequests").doc(requesterDocID).set({
+    completed: false,
     requesterData: requesterDocData,
   });
 
-  await emailUtil
-    .sendConfirmation(requesterDocData, true)
-    .then(() => sendConfirmation(requesterDocData, false))
-    .catch((err) => reject(err));
+  await emailUtil.sendConfirmation(requesterDocData, true).catch((err) => {
+    console.log(err);
+  });
+  await emailUtil.sendConfirmation(requesterDocData, false).catch((err) => {
+    console.log(err);
+  });
 
   return true;
 }
@@ -233,4 +263,5 @@ module.exports = {
   getSpecificInterviewRequest,
   getAllUnfullfilledRequests,
   acceptUserRequest,
+  markRequestAsCompleted,
 };

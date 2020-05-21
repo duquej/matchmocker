@@ -21,6 +21,22 @@ class DisplayRequest extends Component {
     fullfilled: "",
   };
 
+  onCompletion = () => {
+    console.log("clicked submit");
+    Axios.get(
+      `/api/requestCompleted?requesterGoogleID=${this.state.userPostedGoogleID}&docID=${this.state.datetime}&accepterGoogleID=${this.state.accepterGoogleID}`
+    ).then((res) => {
+      if (res.data.success === true) {
+        Message.success("Successfully marked post as completed!");
+        this.setState({ completed: true });
+      } else {
+        Message.error(
+          "An error occured trying to set this request to completed."
+        );
+      }
+    });
+  };
+
   getAcceptedInfo = (fullfilled) => {
     if (fullfilled) {
       console.log(this.state.accepterName);
@@ -64,6 +80,9 @@ class DisplayRequest extends Component {
         const acceptorEmail =
           requestInfo.fullfilled === true ? requestInfo.accepter.email : "";
 
+        const acceptorGoogleID =
+          requestInfo.fullfilled === true ? requestInfo.accepter.googleID : "";
+
         this.setState({
           loading: false,
           datetime: requestInfo.datetime,
@@ -75,6 +94,8 @@ class DisplayRequest extends Component {
           fullfilled: requestInfo.fullfilled,
           accepterEmail: acceptorEmail,
           accepterName: acceptorName,
+          accepterGoogleID: acceptorGoogleID,
+          completed: requestInfo.completed,
         });
       })
       .catch((err) => {
@@ -85,8 +106,31 @@ class DisplayRequest extends Component {
 
   render() {
     let button;
-    if (!this.props.googleID === this.state.userPostedGoogleID) {
+    let title;
+    if (
+      !(this.props.googleID === this.state.userPostedGoogleID) &&
+      this.state.fullfilled === false
+    ) {
       button = <Button type="primary">Accept Request</Button>;
+      title = `[Pending] Interview Request`;
+    } else if (
+      this.props.googleID === this.state.userPostedGoogleID &&
+      this.state.fullfilled === false
+    ) {
+      title = `[Pending] Interview Request`;
+    } else if (
+      this.props.googleID === this.state.userPostedGoogleID &&
+      this.state.fullfilled === true &&
+      this.state.completed == false
+    ) {
+      title = `[Accepted] Interview Request`;
+      button = (
+        <Button type="primary" onClick={() => this.onCompletion()}>
+          Mark as Completed
+        </Button>
+      );
+    } else {
+      title = `[Completed] Interview Request`;
     }
 
     let loadDisplay;
@@ -94,15 +138,7 @@ class DisplayRequest extends Component {
     if (this.state.loading === false) {
       loadDisplay = (
         <div>
-          <Descriptions
-            title={
-              this.state.fullfilled === true
-                ? "[Accepted] Interview Request Information"
-                : "[Pending] Interview Request Information"
-            }
-            layout="vertical"
-            bordered={false}
-          >
+          <Descriptions title={title} layout="vertical" bordered={false}>
             <Descriptions.Item label="Name">
               {this.state.userName}
             </Descriptions.Item>

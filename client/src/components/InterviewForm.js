@@ -224,7 +224,7 @@ class InterviewForm extends Component {
             />
           </Form.Item>
 
-          <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 3 }}>
+          <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 4 }}>
             <Button
               type="primary"
               htmlType="submit"

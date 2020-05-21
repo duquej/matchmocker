@@ -3,7 +3,7 @@ function generateConfirmationHTMLForAccepter(data) {
     <ul>
     <li>Date and Time: ${data.datetime}</li>
     <li>Interview Topic: ${data.topic} </li>
-    <li>Video Chat :ink: ${data.zoomlink} </li>
+    <li>Video Chat Link: ${data.zoomlink} </li>
     <li>Google Doc Link: ${data.doclink} </li>
     <li>Interviewee: ${data.name}</li>
     <li>Interviewee Email: ${data.email}</li>
@@ -22,7 +22,7 @@ function generateConfirmationHTMLForRequester(data) {
     <ul>
     <li>Date and Time: ${data.datetime}</li>
     <li>Interview Topic: ${data.topic} </li>
-    <li>Video Chat :ink: ${data.zoomlink} </li>
+    <li>Video Chat Link: ${data.zoomlink} </li>
     <li>Google Doc Link: ${data.doclink} </li>
     <li>Interviewer: ${data.accepter.name}</li>
     <li>Interviewer Email: ${data.accepter.email}</li>

@@ -5,7 +5,7 @@ const apiConfig = require("./APIConfig.js");
 
 const transporter = nodemailer.createTransport(
   nodemailerSendgrid({
-    apiKey: apiConfig.config.sendGridAPI,
+    apiKey: apiConfig.sendGridAPI,
   })
 );
 

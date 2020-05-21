@@ -52,8 +52,11 @@ const Profile = () => {
               request an interview
             </Link>
           </Menu.Item>
-          <Menu.Item key="4">contact us</Menu.Item>
-          <Menu.Item key="5">submit issue</Menu.Item>
+          <Menu.Item key="submit-issue">
+            <a href={`http://github.com/duquej/matchmocker/issues`}>
+              submit issue
+            </a>
+          </Menu.Item>
         </Menu>
       </Header>
       <Layout>

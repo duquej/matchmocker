@@ -4,7 +4,7 @@ import { message as Message } from "antd";
 import "./MyInterviews.css";
 import PendingInterviews from "./PendingInterviews";
 import Axios from "axios";
-import CompletedInterviews from "../CompletedInterviews";
+import CompletedInterviews from "./CompletedInterviews";
 
 class MyInterviews extends Component {
   constructor(props) {
@@ -14,32 +14,6 @@ class MyInterviews extends Component {
       pendingInterviews: [],
       loading: true,
     };
-  }
-
-  onDelete = (googleID, docID) => {
-    Axios.get(`/api/deleteRequest?docID=${docID}&googleID=${googleID}`)
-      .then((res) => {
-        if (res.data.success === true) {
-          Message.success("Post deleted");
-          console.log(res.data.data);
-          this.setState({ pendingInterviews: res.data.data });
-        } else {
-          Message.error("Could not delete post successfully.");
-        }
-      })
-      .catch((err) => {
-        Message.error("Could not delete your request");
-      });
-  };
-
-  componentDidMount() {
-    this.getFullInterviewRequestsHistory();
-  }
-
-  componentDidUpdate(prevProps) {
-    if (this.props.googleID !== prevProps.googleID) {
-      this.getFullInterviewRequestsHistory();
-    }
   }
 
   parseInterviewRequestHistory = (data) => {
@@ -60,6 +34,31 @@ class MyInterviews extends Component {
       pendingInterviews: pendingInterviewRequests,
     });
   };
+
+  onDelete = (googleID, docID) => {
+    Axios.get(`/api/deleteRequest?docID=${docID}&googleID=${googleID}`)
+      .then((res) => {
+        if (res.data.success === true) {
+          Message.success("Post deleted");
+          this.parseInterviewRequestHistory(res.data.data);
+        } else {
+          Message.error("Could not delete post successfully.");
+        }
+      })
+      .catch((err) => {
+        Message.error("Could not delete your request");
+      });
+  };
+
+  componentDidMount() {
+    this.getFullInterviewRequestsHistory();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.googleID !== prevProps.googleID) {
+      this.getFullInterviewRequestsHistory();
+    }
+  }
 
   getFullInterviewRequestsHistory = () => {
     const googleID = this.props.googleID;
@@ -88,7 +87,11 @@ class MyInterviews extends Component {
           googleID={this.props.googleID}
           onDelete={this.onDelete}
         ></PendingInterviews>
-        <CompletedInterviews></CompletedInterviews>
+        <CompletedInterviews
+          completedInterviews={this.state.completedInterviews}
+          googleID={this.props.googleID}
+          loading={this.state.loading}
+        ></CompletedInterviews>
       </div>
     );
   }

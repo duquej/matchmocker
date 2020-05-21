@@ -33,10 +33,7 @@ function Home() {
             </h1>
             {/* Add Product Info */}
             <Window />
-            <Divider>
-              Sign Up/Sign In (Note: Currently you may only sign in with a
-              google account)
-            </Divider>
+            <Divider>Sign In / Sign Up</Divider>
             <Fields />
           </div>
         </Content>

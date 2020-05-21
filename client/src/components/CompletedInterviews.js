@@ -17,24 +17,15 @@ class CompletedInterviews extends Component {
             <List.Item
               actions={[
                 <a
-                  key="list-loadmore-edit"
-                  href={`/api/editRequest?docID=${item.datetime}&googleID=${this.props.googleID}`}
+                  key="list-loadmore-more"
+                  href={`/dashboard/displayRequest?googleID=${this.props.googleID}&docID=${item.datetime}`}
                 >
-                  edit
+                  more
                 </a>,
-                <a
-                  key="list-delete"
-                  onClick={() => {
-                    this.props.onDelete(this.props.googleID, item.datetime);
-                  }}
-                >
-                  delete
-                </a>,
-                <a key="list-loadmore-more">more</a>,
               ]}
             >
               <div>
-                <Text type="danger">[Unfullfilled] </Text>
+                [Completed]
                 {item.topic} Interview at {item.datetime}
               </div>
             </List.Item>
