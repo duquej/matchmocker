@@ -1,4 +1,5 @@
 let firebase = require("./functions/db-config");
+const emailUtil = require("./functions/email/email-user.js");
 
 const db = firebase.admin.firestore();
 
@@ -149,6 +150,11 @@ async function acceptUserRequest(
     requesterData: requesterDocData,
   });
 
+  await emailUtil
+    .sendConfirmation(requesterDocData, true)
+    .then(() => sendConfirmation(requesterDocData, false))
+    .catch((err) => reject(err));
+
   return true;
 }
 
@@ -192,8 +198,6 @@ async function handleNewInterviewRequest(
   zoomlink,
   doclink
 ) {
-  console.log("zoomlink data:");
-  console.log(zoomlink);
   const requestsRef = await db.collection("requests").doc(googleID);
   requestsRef.set({ googleID: googleID, email: email }, { merge: true });
   requestsRef
