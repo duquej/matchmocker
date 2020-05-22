@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { List, Typography, Divider, Popconfirm } from "antd";
+import { List, Typography, Divider, Popconfirm, Badge } from "antd";
 import "./PendingInterviews.js";
 const { Text } = Typography;
 
@@ -48,10 +48,11 @@ class PendingInterviews extends Component {
             >
               <div>
                 {!item.fullfilled ? (
-                  <Text type="danger"> [Unfullfilled] </Text>
+                  <Badge status="error" text="[Unfullfilled] " />
                 ) : (
-                  <Text>[Accepted] </Text>
+                  <Badge status="processing" text="[Accepted] " />
                 )}
+                &nbsp;
                 {item.topic} Interview at {item.datetime}
               </div>
             </List.Item>

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { List, Typography } from "antd";
+import { List, Typography, Badge } from "antd";
 
 const { Text } = Typography;
 
@@ -25,7 +25,7 @@ class CompletedInterviews extends Component {
               ]}
             >
               <div>
-                [Completed]
+                <Badge status="success" text="[Completed]"></Badge> &nbsp;
                 {item.topic} Interview at {item.datetime}
               </div>
             </List.Item>

@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Redirect } from "react-router-dom";
 import {
   Form,
   Input,
@@ -7,6 +8,7 @@ import {
   Tooltip,
   DatePicker,
   Divider,
+  Alert,
   message as Message,
 } from "antd";
 import { InfoCircleOutlined } from "@ant-design/icons";
@@ -25,6 +27,7 @@ const layout = {
 
 class InterviewForm extends Component {
   state = {
+    redirect: false,
     loading: false,
     email: this.props.email,
     googleID: this.props.googleID,
@@ -50,6 +53,9 @@ class InterviewForm extends Component {
       zoomlink,
       doclink,
     } = this.state;
+
+    const key = "updatable";
+    Message.loading({ content: "Loading...", key });
     axios
       .get(
         `/api/addRequest?email=${this.props.email}&introduction=${introduction}&datetime=${datetime}&googleID=${this.props.googleID}&name=${name}&topic=${topic}&slanguage=${slanguage}&planguage=${planguage}&zoomlink=${zoomlink}&doclink=${doclink}`
@@ -58,23 +64,40 @@ class InterviewForm extends Component {
         this.setState({ loading: false });
 
         if (res.data.success === false) {
-          Message.error(
-            "There was an error trying to publish your interview requst. Please try again later."
-          );
+          Message.error({
+            content: "An error occured. Try again later",
+            key,
+          });
         } else {
-          Message.success("Request successfully published!");
+          Message.success({
+            content: "Successfully submitted!",
+            key,
+            duration: 2,
+          });
+
+          this.setState({ redirect: true });
         }
       })
       .catch((err) => {
-        Message.error(
-          "There was an error trying to reach the server. Please try again later."
-        );
+        Message.error({
+          content:
+            "There was an error trying to reach the server. Please try again later.",
+          key,
+        });
       });
   };
 
   render() {
-    return (
+    const mainForm = (
       <div>
+        <Alert
+          message="Issues or suggestions? Contact us!"
+          description="If you encounter any issues or would like to see any changes, please either email me at jd849@cornell.edu or submit a github issue."
+          type="info"
+          showIcon
+          closable
+        />
+        <br></br>
         <h2 {...layout}>Request an Interview </h2>
         <Divider></Divider>
         <Form
@@ -235,6 +258,14 @@ class InterviewForm extends Component {
           </Form.Item>
         </Form>
       </div>
+    );
+
+    return this.state.redirect ? (
+      <Redirect
+        to={`/dashboard/formsuccess?googleID=${this.props.googleID}&docID=${this.state.datetime}`}
+      ></Redirect>
+    ) : (
+      mainForm
     );
   }
 }
