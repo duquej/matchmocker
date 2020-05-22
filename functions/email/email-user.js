@@ -1,7 +1,7 @@
 const nodemailer = require("nodemailer");
 const nodemailerSendgrid = require("nodemailer-sendgrid");
 const template = require("./email-template.js");
-const apiConfig = require("./APIConfig.js");
+const apiConfig = require("../../configs/keys.js");
 
 const transporter = nodemailer.createTransport(
   nodemailerSendgrid({

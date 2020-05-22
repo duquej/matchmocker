@@ -6,6 +6,7 @@ const passport = require("passport");
 const path = require("path");
 const cookieSession = require("cookie-session");
 const functions = require("./db-functions.js");
+const keys = require("./configs/keys.js");
 
 app.use(cors());
 
@@ -14,7 +15,7 @@ app.use(express.static(path.join(__dirname, "client/build")));
 app.use(
   cookieSession({
     maxAge: 24 * 60 * 60 * 1000,
-    keys: ["johnappletoestee"],
+    keys: [keys.cookieKey],
   })
 );
 

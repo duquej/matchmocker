@@ -1,6 +1,7 @@
 const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20");
 const functions = require("../db-functions.js");
+const keys = require("./keys.js");
 
 passport.serializeUser((userID, done) => {
   done(null, userID);
@@ -20,9 +21,8 @@ passport.deserializeUser((userID, done) => {
 passport.use(
   new GoogleStrategy(
     {
-      clientID:
-        "786400352538-87drh2ra92f7k3j7qa5cbk4p9e6jon9f.apps.googleusercontent.com",
-      clientSecret: "0nBJXO1oI64YK_O-rfpFKNmv",
+      clientID: keys.googleClientID,
+      clientSecret: keys.googleClientSecret,
       callbackURL: "/auth/redirect",
     },
     (accessToken, refreshToken, profile, done) => {
