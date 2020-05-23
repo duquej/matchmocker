@@ -1,5 +1,11 @@
 import React, { Component } from "react";
-import { Descriptions, Button, Divider, message as Message } from "antd";
+import {
+  Descriptions,
+  Button,
+  Divider,
+  message as Message,
+  Popconfirm,
+} from "antd";
 import Axios from "axios";
 
 class DisplayRequest extends Component {
@@ -131,14 +137,16 @@ class DisplayRequest extends Component {
       this.state.fullfilled === false
     ) {
       button = (
-        <Button
-          type="primary"
-          onClick={() =>
-            this.onAccept(this.state.userPostedGoogleID, this.state.datetime)
-          }
+        <Popconfirm
+          title="Are you sure you want to accept this request?"
+          onConfirm={() => {
+            this.onAccept(this.state.userPostedGoogleID, this.state.datetime);
+          }}
+          okText="Yes"
+          cancelText="No"
         >
-          Accept Request
-        </Button>
+          <Button type="primary">Accept Request</Button>
+        </Popconfirm>
       );
       title = `[Pending] Interview Request`;
     } else if (
