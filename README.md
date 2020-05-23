@@ -21,7 +21,7 @@ I built this project with the intention of helping out students (like myself) pr
 
 ## Installation
 
-Use the following commands to get this project up and running
+Use the following commands to get this project up and running. Note: you will need to generate your own API Keys to get this app to work.
 
 ```bash
 git clone [projecturl]

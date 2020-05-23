@@ -20,10 +20,14 @@ class App extends Component {
     };
   }
 
-  componentDidMount = () =>
+  componentDidMount = () => {
+    console.log("Page view.");
     ReactGA.pageview(window.location.pathname + window.location.search);
-  componentDidUpdate = () =>
+  };
+  componentDidUpdate = () => {
+    console.log("Page View");
     ReactGA.pageview(window.location.pathname + window.location.search);
+  };
 
   render() {
     return (
