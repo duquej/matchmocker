@@ -10,7 +10,6 @@ import Intermediary from "./Intermediary";
 import ReactGA from "react-ga";
 
 ReactGA.initialize(process.env.ANALYTICS_API_KEY);
-ReactGA.pageview(window.location.pathname + window.location.search);
 
 class App extends Component {
   constructor() {
@@ -20,6 +19,12 @@ class App extends Component {
       user: {},
     };
   }
+
+  componentDidMount = () =>
+    ReactGA.pageview(window.location.pathname + window.location.search);
+  componentDidUpdate = () =>
+    ReactGA.pageview(window.location.pathname + window.location.search);
+
   render() {
     return (
       <div className="app">

@@ -60,11 +60,30 @@ class DisplayRequest extends Component {
     }
   };
 
-  onAccept = () => {
-    //we need the ID of the person who accepted the request, and
-    //we also need to email the other person. {luckily, we have the relevant user info passed down to us!}
-    //so we need to make two database calls.
+  onAccept = (requesterGoogleID, requesterDocID) => {
+    const currUserGoogleID = this.props.googleID;
+    const currUserEmail = this.props.email;
+    const currUserName = this.props.name;
+
+    Axios.get(
+      `/api/acceptRequest?requesterGoogleID=${requesterGoogleID}&requesterDocID=${requesterDocID}&accepterGoogleID=${currUserGoogleID}&accepterEmail=${currUserEmail}&accepterName=${currUserName}`
+    ).then((res) => {
+      if (res.data.success === true) {
+        Message.success("Successfully accepted!");
+
+        this.setState({
+          fullfilled: true,
+          accepterEmail: currUserEmail,
+          accepterName: currUserName,
+          accepterGoogleID: currUserGoogleID,
+          completed: false,
+        });
+      } else {
+        Message.error("Could not accept. Try again later.");
+      }
+    });
   };
+
   componentDidMount() {
     let search = window.location.search;
     let params = new URLSearchParams(search);
@@ -111,7 +130,16 @@ class DisplayRequest extends Component {
       !(this.props.googleID === this.state.userPostedGoogleID) &&
       this.state.fullfilled === false
     ) {
-      button = <Button type="primary">Accept Request</Button>;
+      button = (
+        <Button
+          type="primary"
+          onClick={() =>
+            this.onAccept(this.state.userPostedGoogleID, this.state.datetime)
+          }
+        >
+          Accept Request
+        </Button>
+      );
       title = `[Pending] Interview Request`;
     } else if (
       this.props.googleID === this.state.userPostedGoogleID &&

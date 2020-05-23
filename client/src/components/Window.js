@@ -14,7 +14,7 @@ function Window() {
           <input
             className="domain"
             type="text"
-            value="https://www.gmail.com"
+            value="https://www.gmail.com/inbox"
             readOnly
           />
         </div>
