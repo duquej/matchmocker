@@ -7,12 +7,18 @@ import { Route, Switch, useRouteMatch, Link, Router } from "react-router-dom";
 import "antd/dist/antd.css";
 import "./Dashboard.css";
 
-import { Layout, Menu } from "antd";
-import { UserOutlined } from "@ant-design/icons";
+import { Layout, Menu, Avatar } from "antd";
+import {
+  UserOutlined,
+  LogoutOutlined,
+  SettingOutlined,
+  ProfileOutlined,
+} from "@ant-design/icons";
 import MyInterviews from "./components/MyInterviews";
 import DisplayRequest from "./components/DisplayRequest";
 import InterviewListings from "./components/InterviewListings";
 import FormSuccess from "./components/FormSuccess";
+import MySettings from "./components/MySettings";
 
 const { SubMenu } = Menu;
 const { Header, Content, Sider } = Layout;
@@ -27,7 +33,8 @@ const Profile = () => {
   const userData = useContext(UserProvider.context);
   const text = userData.username;
   let match = useRouteMatch();
-
+  let pathname = window.location.pathname;
+  let pathnameSider = pathname === "/" ? "/dashboard" : pathname;
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Header style={{ color: "#FFF", fontSize: "16px" }}>
@@ -35,20 +42,20 @@ const Profile = () => {
         <Menu
           theme="dark"
           mode="horizontal"
-          defaultSelectedKeys={["dashboard"]}
+          defaultSelectedKeys={[pathnameSider || "/dashboard"]}
           style={{ float: "right" }}
         >
-          <Menu.Item key="dashboard">
+          <Menu.Item key="/dashboard">
             <Link to={`/dashboard`} className="nav-text">
               dashboard
             </Link>
           </Menu.Item>
-          <Menu.Item key="listings">
+          <Menu.Item key="/dashboard/listings">
             <Link to={`/dashboard/listings`} className="nav-text">
               interview listings
             </Link>
           </Menu.Item>
-          <Menu.Item key="request">
+          <Menu.Item key="/dashboard/request">
             <Link to={`/dashboard/request`} className="nav-text">
               request an interview
             </Link>
@@ -64,7 +71,7 @@ const Profile = () => {
         <Sider width={200} className="site-layout-background">
           <Menu
             mode="inline"
-            defaultSelectedKeys={["1"]}
+            defaultSelectedKeys={[pathnameSider || "/dashboard"]}
             defaultOpenKeys={["sub1"]}
             //theme="dark"
             style={{ height: "100%", borderRight: 0 }}
@@ -74,8 +81,24 @@ const Profile = () => {
               icon={<UserOutlined />}
               title={userData.username}
             >
-              <Menu.Item key="2">
-                <a href="/logout">logout</a>
+              <Menu.Item key="/dashboard/profile">
+                <ProfileOutlined />
+                <Link
+                  to={`/dashboard/profile?googleID=${userData.googleID}`}
+                  className="nav-text"
+                >
+                  Profile
+                </Link>
+              </Menu.Item>
+              <Menu.Item key="/dashboard/mySettings">
+                <SettingOutlined />
+                <Link to={`/dashboard/mySettings`} className="nav-text">
+                  Settings
+                </Link>
+              </Menu.Item>
+              <Menu.Item key="4">
+                <LogoutOutlined />
+                <a href="/logout">Logout</a>
               </Menu.Item>
             </SubMenu>
           </Menu>
@@ -126,6 +149,16 @@ const Profile = () => {
                   ></DisplayRequest>
                 )}
               />
+
+              <Route
+                path={`/dashboard/mySettings`}
+                render={() => (
+                  <MySettings
+                    email={userData.email}
+                    name={userData.username}
+                  ></MySettings>
+                )}
+              ></Route>
 
               <Route
                 path={`${match.path}`}

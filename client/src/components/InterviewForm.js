@@ -13,15 +13,16 @@ import {
 } from "antd";
 import { InfoCircleOutlined } from "@ant-design/icons";
 import axios from "axios";
+import "./MyInterviews.css";
 
 const { Option } = Select;
 
 const layout = {
   labelCol: {
-    span: 4,
+    span: 7,
   },
   wrapperCol: {
-    span: 8,
+    span: 10,
   },
 };
 
@@ -98,7 +99,7 @@ class InterviewForm extends Component {
           closable
         />
         <br></br>
-        <h2 {...layout}>Request an Interview </h2>
+        <h2 className="center">Request an Interview </h2>
         <Divider></Divider>
         <Form
           {...layout}
@@ -111,6 +112,7 @@ class InterviewForm extends Component {
             label="Name"
             rules={[
               {
+                message: "Please type in a display name.",
                 required: true,
               },
             ]}
@@ -121,7 +123,9 @@ class InterviewForm extends Component {
           <Form.Item
             name={["user", "introduction"]}
             label="Introduction"
-            rules={[{ required: true }]}
+            rules={[
+              { required: true, message: "Please type in an introduction." },
+            ]}
           >
             <Input.TextArea
               onBlur={(e) => this.setState({ introduction: e.target.value })}
@@ -140,8 +144,11 @@ class InterviewForm extends Component {
                 this.setState({ topic: e });
               }}
             >
-              <Option value="Data Structures">Data Structures</Option>
+              <Option value="Data Structures and Algorithms">
+                Data Structures and Algorithms
+              </Option>
               <Option value="Dynamic Programming">Dynamic Programming</Option>
+              <Option value="LeetCode Style">LeetCode Style</Option>
             </Select>
           </Form.Item>
 
@@ -151,6 +158,7 @@ class InterviewForm extends Component {
             rules={[
               {
                 required: true,
+                message: "Please choose your spoken language",
               },
             ]}
           >
@@ -184,7 +192,9 @@ class InterviewForm extends Component {
               <Option value="Python">Python</Option>
               <Option value="C++">C++</Option>
               <Option value="C#">C#</Option>
-              <Option value="Javascript">javascript</Option>
+              <Option value="C">C</Option>
+              <Option value="Javascript">Javascript</Option>
+              <Option value="OCaml">OCaml</Option>
             </Select>
           </Form.Item>
 
@@ -247,7 +257,7 @@ class InterviewForm extends Component {
             />
           </Form.Item>
 
-          <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 4 }}>
+          <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 7 }}>
             <Button
               type="primary"
               htmlType="submit"

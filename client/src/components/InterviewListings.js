@@ -9,6 +9,7 @@ import {
   Alert,
 } from "antd";
 import Axios from "axios";
+import "./MyInterviews.css";
 
 class InterviewListings extends Component {
   state = {
@@ -95,30 +96,45 @@ class InterviewListings extends Component {
       {
         title: "Action",
         key: "action",
-        render: (text, record) => (
-          <Space size="middle">
-            <Popconfirm
-              title="Are you sure you want to accept this request?"
-              onConfirm={() => {
-                this.onAccept(
-                  record.googleID,
-                  record.datetime,
-                  record.datetime
-                );
-              }}
-              okText="Yes"
-              cancelText="No"
-            >
-              <a href="#">accept request</a>
-            </Popconfirm>
-            <a
-              key="list-loadmore-more"
-              href={`/dashboard/displayRequest?googleID=${record.googleID}&docID=${record.datetime}`}
-            >
-              more
-            </a>
-          </Space>
-        ),
+        render: (text, record) => {
+          if (record.googleID !== this.props.googleID) {
+            return (
+              <Space size="middle">
+                <Popconfirm
+                  title="Are you sure you want to accept this request?"
+                  onConfirm={() => {
+                    this.onAccept(
+                      record.googleID,
+                      record.datetime,
+                      record.datetime
+                    );
+                  }}
+                  okText="Yes"
+                  cancelText="No"
+                >
+                  <a href="#">accept request</a>
+                </Popconfirm>
+                <a
+                  key="list-loadmore-more"
+                  href={`/dashboard/displayRequest?googleID=${record.googleID}&docID=${record.datetime}`}
+                >
+                  more
+                </a>
+              </Space>
+            );
+          } else {
+            return (
+              <Space size="middle">
+                <a
+                  key="list-loadmore-more"
+                  href={`/dashboard/displayRequest?googleID=${record.googleID}&docID=${record.datetime}`}
+                >
+                  more
+                </a>
+              </Space>
+            );
+          }
+        },
       },
     ];
 
@@ -132,7 +148,7 @@ class InterviewListings extends Component {
           closable
         />
         <br></br>
-        <h2>Interview Listings</h2>
+        <h2 className="center">Interview Listings</h2>
 
         <Divider></Divider>
         <Table
