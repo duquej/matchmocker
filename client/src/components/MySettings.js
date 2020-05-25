@@ -1,9 +1,29 @@
 import React, { Component } from "react";
-import { Divider, Form, Input, Button, Popconfirm } from "antd";
+import {
+  Divider,
+  Form,
+  Input,
+  Button,
+  Popconfirm,
+  message as Message,
+} from "antd";
+import Axios from "axios";
 import "./MyInterviews.css";
 
 class MySettings extends Component {
   state = {};
+
+  onDelete = () => {
+    Axios.get(`/api/deleteAccount?googleID=${this.props.googleID}`)
+      .then((res) => {
+        window.location.href = "/";
+      })
+      .catch((err) => {
+        Message.error(
+          "An error occured trying to communicate with the server. Try again later."
+        );
+      });
+  };
 
   render() {
     const layout = {
@@ -33,7 +53,7 @@ class MySettings extends Component {
               okText="Yes"
               cancelText="No"
               onConfirm={() => {
-                console.log("confirmed.");
+                this.onDelete();
               }}
             >
               <Button type="primary" danger>

@@ -73,6 +73,14 @@ async function deleteUserInterviewRequest(docID, googleID) {
   return updatedRequests;
 }
 
+async function deleteAccount(googleID) {
+  //Not deleting from users collection for stats collection purposes. But deleting all other info.
+  const docRef = db.collection("requests").doc(googleID);
+  return docRef.delete().catch((err) => {
+    console.log(err);
+  });
+}
+
 async function markRequestAsCompleted(
   docID,
   requesterGoogleID,
@@ -204,6 +212,7 @@ async function getSpecificInterviewRequest(googleID, docID) {
 
 async function getAllUserRequestsFromID(googleID) {
   const requestsRef = await db.collection("requests").doc(googleID);
+
   const allInterviewRequestsMade = requestsRef
     .collection("userrequests")
     .get()
@@ -211,6 +220,7 @@ async function getAllUserRequestsFromID(googleID) {
       const allData = querySnapshot.docs.map((doc) => {
         return doc.data();
       });
+
       return allData;
     });
   return allInterviewRequestsMade;
@@ -264,4 +274,5 @@ module.exports = {
   getAllUnfullfilledRequests,
   acceptUserRequest,
   markRequestAsCompleted,
+  deleteAccount,
 };

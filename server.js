@@ -38,6 +38,20 @@ app.get("/user", (req, res) => {
   res.send(req.user);
 });
 
+app.get("/api/deleteAccount", (req, res) => {
+  const { googleID } = req.query;
+  functions
+    .deleteAccount(googleID)
+    .then((data) => {
+      req.logout();
+      res.redirect("/");
+    })
+    .catch((err) => {
+      console.log(err);
+      res.sendStatus(500);
+    });
+});
+
 app.get("/", (req, res) => {
   console.log("called.");
   //if (req.user) {

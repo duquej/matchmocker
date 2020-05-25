@@ -81,7 +81,7 @@ const Profile = () => {
               icon={<UserOutlined />}
               title={userData.username}
             >
-              <Menu.Item key="/dashboard/profile">
+              <Menu.Item key="/dashboard/profile" disabled>
                 <ProfileOutlined />
                 <Link
                   to={`/dashboard/profile?googleID=${userData.googleID}`}
@@ -156,6 +156,7 @@ const Profile = () => {
                   <MySettings
                     email={userData.email}
                     name={userData.username}
+                    googleID={userData.googleID}
                   ></MySettings>
                 )}
               ></Route>
