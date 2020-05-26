@@ -1,0 +1,33 @@
+.avatarHolder {
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.avatarImg {
+  width: 104px;
+  height: 104px;
+  margin-bottom: 20px;
+  border-radius: 50%;
+}
+
+.avatarName {
+  margin-bottom: 4px;
+  color: "black";
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 28px;
+}
+
+.detailParagraph {
+  position: relative;
+  margin-bottom: 8px;
+  padding-left: 26px;
+}
+
+.detailGroup {
+  background-position: 0 -22px;
+}
+
+.detailTitle {
+  background-position: 0 0;
+}

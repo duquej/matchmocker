@@ -37,7 +37,7 @@ class App extends Component {
       <div className="app">
         <BrowserRouter>
           <UserProvider>
-            <ProtectedRoute
+            <Route
               path="/dashboard"
               loggedIn={this.state.loggedInStatus}
               component={Dashboard}

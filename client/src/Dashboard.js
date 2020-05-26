@@ -19,16 +19,12 @@ import DisplayRequest from "./components/DisplayRequest";
 import InterviewListings from "./components/InterviewListings";
 import FormSuccess from "./components/FormSuccess";
 import MySettings from "./components/MySettings";
+import Profile from "./components/Profile";
 
 const { SubMenu } = Menu;
 const { Header, Content, Sider } = Layout;
 
-const LoginMsg =
-  "Uh oh, there's nothing to show! " +
-  "Login to see how much of your invaluable personal " +
-  "data tech companies have at their disposal.";
-
-const Profile = () => {
+const Dashboard = () => {
   const [selected, setSelected] = useState("All");
   const userData = useContext(UserProvider.context);
   const text = userData.username;
@@ -81,12 +77,9 @@ const Profile = () => {
               icon={<UserOutlined />}
               title={userData.username}
             >
-              <Menu.Item key="/dashboard/profile" disabled>
+              <Menu.Item key="/dashboard/profile">
                 <ProfileOutlined />
-                <Link
-                  to={`/dashboard/profile?googleID=${userData.googleID}`}
-                  className="nav-text"
-                >
+                <Link to={`/dashboard/profile`} className="nav-text">
                   Profile
                 </Link>
               </Menu.Item>
@@ -162,6 +155,18 @@ const Profile = () => {
               ></Route>
 
               <Route
+                path={`/dashboard/profile`}
+                render={() => (
+                  <Profile
+                    email={userData.email}
+                    name={userData.username}
+                    googleID={userData.googleID}
+                    profilePic={userData.profilePic}
+                  ></Profile>
+                )}
+              ></Route>
+
+              <Route
                 path={`${match.path}`}
                 render={() => (
                   <MyInterviews
@@ -181,4 +186,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default Dashboard;
