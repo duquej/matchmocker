@@ -3,6 +3,8 @@ import { Modal, Button, Form, Input, Divider } from "antd";
 import Axios from "axios";
 
 class ReportModal extends Component {
+  formRef = React.createRef();
+
   state = {
     visible: false,
     value: "",
@@ -37,21 +39,25 @@ class ReportModal extends Component {
   }
 
   onSubmitReport = () => {
-    Axios.get(
-      `/api/submitReport?reportedGoogleID=${this.props.reportedUserGoogleID}&reportedUserName=${this.props.reportedUserName}&reporterGoogleID=${this.props.reporterGoogleID}&reporterUserName=${this.props.reporterUserName}&reportedReason=${this.state.value}`
-    )
-      .then((res) => {
-        if (res.data.success === true) {
-          this.reportSuccess(res.data.data);
-          this.setState({ visible: false, value: "" });
-        } else {
+    this.formRef.current.validateFields().then((values) => {
+      Axios.get(
+        `/api/submitReport?reportedGoogleID=${this.props.reportedUserGoogleID}&reportedUserName=${this.props.reportedUserName}&reporterGoogleID=${this.props.reporterGoogleID}&reporterUserName=${this.props.reporterUserName}&reportedReason=${this.state.value}`
+      )
+        .then((res) => {
+          if (res.data.success === true) {
+            this.reportSuccess(res.data.data);
+
+            this.setState({ visible: false, value: "" });
+            this.formRef.current.resetFields();
+          } else {
+            this.reportError();
+          }
+        })
+        .catch((err) => {
           this.reportError();
-        }
-      })
-      .catch((err) => {
-        this.reportError();
-        this.setState({ visible: false, value: "" });
-      });
+          this.setState({ visible: false, value: "" });
+        });
+    });
   };
 
   render() {
@@ -72,18 +78,22 @@ class ReportModal extends Component {
             posting abusive content, or are harassing you/others.
           </p>
           <Divider></Divider>
-          <Form.Item
-            name={["user", "reason"]}
-            label="Reason"
-            rules={[
-              {
-                message: "Please state your reason for reporting.",
-                required: true,
-              },
-            ]}
-          >
-            <Input onChange={(e) => this.setState({ value: e.target.value })} />
-          </Form.Item>
+          <Form ref={this.formRef}>
+            <Form.Item
+              name={["user", "reason"]}
+              label="Reason"
+              rules={[
+                {
+                  message: "Please state your reason for reporting.",
+                  required: true,
+                },
+              ]}
+            >
+              <Input
+                onChange={(e) => this.setState({ value: e.target.value })}
+              />
+            </Form.Item>
+          </Form>
         </Modal>
       </div>
     );
