@@ -38,6 +38,83 @@ app.get("/user", (req, res) => {
   res.send(req.user);
 });
 
+app.get("/api/submitComment", (req, res) => {
+  const {
+    profileGoogleID,
+    comment,
+    submittedByGoogleID,
+    submittedByName,
+    submittedProfilePic,
+  } = req.query;
+
+  functions
+    .handleNewComment(
+      profileGoogleID,
+      comment,
+      submittedByGoogleID,
+      submittedByName,
+      submittedProfilePic
+    )
+    .then((data) => {
+      console.log("successfully finished.");
+      console.log(data);
+      res.send({ success: true });
+    })
+    .catch((err) => {
+      console.log("an error has occured" + err);
+      res.send({ success: false, message: err });
+    });
+});
+
+app.get("/api/getProfileComments", (req, res) => {
+  const { googleID } = req.query;
+  functions
+    .getProfileComments(googleID)
+    .then((data) => {
+      res.send({ success: true, data: data });
+    })
+    .catch((err) => {
+      res.send({ success: false, message: err });
+    });
+});
+
+app.get("/api/getProfileInfo", (req, res) => {
+  const { googleID } = req.query;
+  functions
+    .returnUserFromUserID(googleID)
+    .then((data) => {
+      res.send({ success: true, data: data });
+    })
+    .catch((err) => {
+      res.send({ success: false, message: err });
+    });
+});
+
+app.get("/api/submitReport", (req, res) => {
+  const {
+    reportedGoogleID,
+    reportedUserName,
+    reportedReason,
+    reporterGoogleID,
+    reporterUserName,
+  } = req.query;
+
+  functions
+    .handleNewReport(
+      reportedGoogleID,
+      reportedUserName,
+      reportedReason,
+      reporterGoogleID,
+      reporterUserName
+    )
+    .then((data) => {
+      res.send({ success: true, data: data });
+    })
+    .catch((err) => {
+      res.send({ success: false, message: err });
+    });
+});
+
 app.get("/api/deleteAccount", (req, res) => {
   const { googleID } = req.query;
   functions

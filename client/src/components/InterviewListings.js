@@ -66,6 +66,9 @@ class InterviewListings extends Component {
         title: "Name",
         dataIndex: "name",
         key: "name",
+        render: (name, record) => (
+          <a href={`/dashboard/profile?googleID=${record.googleID}`}>{name}</a>
+        ),
       },
 
       {

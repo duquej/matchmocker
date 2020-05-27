@@ -79,7 +79,10 @@ const Dashboard = () => {
             >
               <Menu.Item key="/dashboard/profile">
                 <ProfileOutlined />
-                <Link to={`/dashboard/profile`} className="nav-text">
+                <Link
+                  to={`/dashboard/profile?googleID=${userData.googleID}`}
+                  className="nav-text"
+                >
                   Profile
                 </Link>
               </Menu.Item>

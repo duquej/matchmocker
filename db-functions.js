@@ -30,6 +30,7 @@ async function handleUserLogin(id, displayName, profilePicLink, email) {
         googleID: id,
         profilePic: profilePicLink,
         email: email,
+        group: "Member",
       },
       { merge: true }
     )
@@ -39,6 +40,30 @@ async function handleUserLogin(id, displayName, profilePicLink, email) {
     .catch((err) => {
       console.log("An error has occured trying to add a user to the database.");
     });
+}
+
+async function handleNewReport(
+  reportedGoogleID,
+  reportedUserName,
+  reportedReason,
+  reporterGoogleID,
+  reporterUserName
+) {
+  const reportRef = db.collection("reports").doc();
+  const reportID = reportRef.id;
+  const fullfilled = await reportRef
+    .set({
+      reportedGoogleID: reportedGoogleID,
+      reportedUserName: reportedUserName,
+      reportedReason: reportedReason,
+      reporterUserName: reporterUserName,
+      reporterGoogleID: reporterGoogleID,
+    })
+    .then((resp) => {
+      return reportID;
+    });
+
+  return fullfilled;
 }
 
 async function deleteUserInterviewRequest(docID, googleID) {
@@ -138,6 +163,18 @@ async function getAllUnfullfilledRequests() {
     });
 
   return requestsRefData;
+}
+
+async function getProfileComments(googleID) {
+  const profileRef = db
+    .collection("profiles")
+    .doc(googleID)
+    .collection("comments");
+  return await profileRef.get().then((querySnapshot) => {
+    return querySnapshot.docs.map((doc) => {
+      return doc.data();
+    });
+  });
 }
 
 async function acceptUserRequest(
@@ -264,6 +301,29 @@ async function handleNewInterviewRequest(
     });
 }
 
+async function handleNewComment(
+  profileGoogleID,
+  comment,
+  submittedByGoogleID,
+  submittedByName,
+  submittedProfilePic
+) {
+  const profileRef = db.collection("profiles").doc(profileGoogleID);
+  profileRef.set({ googleID: profileGoogleID }, { merge: true });
+  return await profileRef
+    .collection("comments")
+    .doc()
+    .set({
+      comment: comment,
+      submittedByGoogleID: submittedByGoogleID,
+      submittedByName: submittedByName,
+      submittedProfilePic: submittedProfilePic,
+    })
+    .then((data) => {
+      return true;
+    });
+}
+
 module.exports = {
   returnUserFromUserID,
   handleUserLogin,
@@ -275,4 +335,7 @@ module.exports = {
   acceptUserRequest,
   markRequestAsCompleted,
   deleteAccount,
+  handleNewComment,
+  getProfileComments,
+  handleNewReport,
 };
