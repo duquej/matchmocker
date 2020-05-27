@@ -15,6 +15,7 @@ class App extends Component {
     super();
     this.state = {
       loggedInStatus: false,
+      loading: true,
     };
   }
 
@@ -22,7 +23,7 @@ class App extends Component {
     console.log("Page view.");
 
     auth.isAuthenticated().then((resp) => {
-      this.setState({ loggedInStatus: resp });
+      this.setState({ loading: false, loggedInStatus: resp });
     });
 
     ReactGA.pageview(window.location.pathname + window.location.search);
@@ -37,9 +38,10 @@ class App extends Component {
       <div className="app">
         <BrowserRouter>
           <UserProvider>
-            <Route
+            <ProtectedRoute
               path="/dashboard"
               loggedIn={this.state.loggedInStatus}
+              loading={this.state.loading}
               component={Dashboard}
             />
             <Route exact path="/" component={Intermediary}></Route>
