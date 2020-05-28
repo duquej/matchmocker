@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { List, Typography, Divider, Popconfirm, Badge } from "antd";
 import "./PendingInterviews.js";
+import { Link } from "react-router-dom";
 const { Text } = Typography;
 
 class PendingInterviews extends Component {
@@ -20,13 +21,6 @@ class PendingInterviews extends Component {
           renderItem={(item) => (
             <List.Item
               actions={[
-                <a
-                  key="list-loadmore-edit"
-                  href={`/api/editRequest?docID=${item.datetime}&googleID=${this.props.googleID}`}
-                >
-                  edit
-                </a>,
-
                 <Popconfirm
                   title="Are you sure you want to delete this request?"
                   onConfirm={() => {
@@ -38,12 +32,11 @@ class PendingInterviews extends Component {
                   <a href="#">delete</a>
                 </Popconfirm>,
 
-                <a
-                  key="list-loadmore-more"
-                  href={`/dashboard/displayRequest?googleID=${this.props.googleID}&docID=${item.datetime}`}
+                <Link
+                  to={`/dashboard/displayRequest?googleID=${this.props.googleID}&docID=${item.datetime}`}
                 >
                   more
-                </a>,
+                </Link>,
               ]}
             >
               <div>

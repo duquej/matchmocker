@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { List, Typography, Badge } from "antd";
+import { Link } from "react-router-dom";
 
 const { Text } = Typography;
 
@@ -16,12 +17,11 @@ class CompletedInterviews extends Component {
           renderItem={(item) => (
             <List.Item
               actions={[
-                <a
-                  key="list-loadmore-more"
-                  href={`/dashboard/displayRequest?googleID=${this.props.googleID}&docID=${item.datetime}`}
+                <Link
+                  to={`/dashboard/displayRequest?googleID=${this.props.googleID}&docID=${item.datetime}`}
                 >
                   more
-                </a>,
+                </Link>,
               ]}
             >
               <div>

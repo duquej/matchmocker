@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import {
   Table,
   Tag,
@@ -67,7 +68,9 @@ class InterviewListings extends Component {
         dataIndex: "name",
         key: "name",
         render: (name, record) => (
-          <a href={`/dashboard/profile?googleID=${record.googleID}`}>{name}</a>
+          <Link to={`/dashboard/profile?googleID=${record.googleID}`}>
+            {name}
+          </Link>
         ),
       },
 
@@ -117,23 +120,21 @@ class InterviewListings extends Component {
                 >
                   <a href="#">accept request</a>
                 </Popconfirm>
-                <a
-                  key="list-loadmore-more"
-                  href={`/dashboard/displayRequest?googleID=${record.googleID}&docID=${record.datetime}`}
+                <Link
+                  to={`/dashboard/displayRequest?googleID=${record.googleID}&docID=${record.datetime}`}
                 >
                   more
-                </a>
+                </Link>
               </Space>
             );
           } else {
             return (
               <Space size="middle">
-                <a
-                  key="list-loadmore-more"
-                  href={`/dashboard/displayRequest?googleID=${record.googleID}&docID=${record.datetime}`}
+                <Link
+                  to={`/dashboard/displayRequest?googleID=${record.googleID}&docID=${record.datetime}`}
                 >
                   more
-                </a>
+                </Link>
               </Space>
             );
           }

@@ -77,14 +77,11 @@ const Dashboard = () => {
               icon={<UserOutlined />}
               title={userData.username}
             >
-              <Menu.Item key="/dashboard/profile">
+              <Menu.Item key={`/dashboard/profile`}>
                 <ProfileOutlined />
-                <Link
-                  to={`/dashboard/profile?googleID=${userData.googleID}`}
-                  className="nav-text"
-                >
+                <a href={`/dashboard/profile?googleID=${userData.googleID}`}>
                   Profile
-                </Link>
+                </a>
               </Menu.Item>
               <Menu.Item key="/dashboard/mySettings">
                 <SettingOutlined />

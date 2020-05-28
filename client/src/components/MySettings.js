@@ -5,6 +5,7 @@ import {
   Input,
   Button,
   Popconfirm,
+  Alert,
   message as Message,
 } from "antd";
 import Axios from "axios";
@@ -12,6 +13,12 @@ import "./MyInterviews.css";
 
 class MySettings extends Component {
   state = {};
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.text !== this.props.text) {
+      console.log("props updateds");
+    }
+  }
 
   onDelete = () => {
     Axios.get(`/api/deleteAccount?googleID=${this.props.googleID}`)
@@ -37,14 +44,24 @@ class MySettings extends Component {
 
     return (
       <div>
+        <Alert
+          message="You cannot currently change your display name. This feature will be available soon."
+          type="info"
+          showIcon
+          closable
+        />
+        <br></br>
         <h2 className="center">Basic Settings</h2>
         <Divider></Divider>
         <Form {...layout} name="basic-settings">
-          <Form.Item name={["user", "name"]} label="Name">
-            <Input defaultValue={`${this.props.name}`} disabled />
+          <Form.Item name={["user", "name"]} label="Name: ">
+            <Input placeholder={`${this.props.name}`} disabled />
           </Form.Item>
           <Form.Item name={["user", "email"]} label="Email">
-            <Input defaultValue={`${this.props.email}`} disabled />
+            <Input placeholder={`${this.props.email}`} disabled />
+          </Form.Item>
+          <Form.Item name={["user", "displayName"]} label="Display Name">
+            <Input placeholder={`${this.props.name}`} disabled />
           </Form.Item>
 
           <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 7 }}>
