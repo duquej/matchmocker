@@ -88,6 +88,7 @@ class MyInterviews extends Component {
           googleID={this.props.googleID}
           onDelete={this.onDelete}
         ></PendingInterviews>
+        <br></br>
         <CompletedInterviews
           completedInterviews={this.state.completedInterviews}
           googleID={this.props.googleID}

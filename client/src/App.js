@@ -44,7 +44,16 @@ class App extends Component {
               loading={this.state.loading}
               component={Dashboard}
             />
-            <Route exact path="/" component={Intermediary}></Route>
+            <Route
+              exact
+              path="/"
+              render={() => (
+                <Intermediary
+                  loggedInStatus={this.state.loggedInStatus}
+                  loading={this.state.loading}
+                ></Intermediary>
+              )}
+            ></Route>
           </UserProvider>
         </BrowserRouter>
       </div>

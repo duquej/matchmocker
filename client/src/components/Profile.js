@@ -11,6 +11,7 @@ import {
   Form,
   Input,
   List,
+  Tabs,
   message as Message,
 } from "antd";
 import Axios from "axios";
@@ -20,11 +21,11 @@ import ReportModal from "./ReportModal";
 import moment from "moment";
 
 const { TextArea } = Input;
+const { TabPane } = Tabs;
 
 const CommentList = ({ comments }) => (
   <List
     dataSource={comments}
-    header={`${comments.length} ${comments.length > 1 ? "replies" : "reply"}`}
     itemLayout="horizontal"
     renderItem={(item) => (
       <Comment
@@ -190,7 +191,7 @@ class Profile extends Component {
                     {` Interviews Completed: NA`}
                   </p>
                 </div>
-                <Divider dashed />
+                <Divider />
                 <ReportModal
                   reportedUserGoogleID={this.state.profileGoogleID}
                   reportedUserName={this.state.profileName}
@@ -202,20 +203,36 @@ class Profile extends Component {
           </Col>
           <Col lg={17} md={24}>
             <Card bordered={true} loading={this.state.commentLoading}>
-              {this.state.comments.length > 0 && (
-                <CommentList comments={this.state.comments} />
-              )}
+              <Tabs>
+                <TabPane
+                  tab={`Comments (${this.state.comments.length})`}
+                  key="comments"
+                >
+                  {this.state.comments.length > 0 && (
+                    <CommentList comments={this.state.comments} />
+                  )}
 
-              <Comment
-                avatar={<Avatar src={this.props.profilePic} alt="Han Solo" />}
-                content={
-                  <Editor
-                    onChange={(e) => this.setState({ comment: e.target.value })}
-                    onSubmit={this.onSubmitComment}
-                    value={this.state.comment}
+                  <Comment
+                    avatar={
+                      <Avatar src={this.props.profilePic} alt="Han Solo" />
+                    }
+                    content={
+                      <Editor
+                        onChange={(e) =>
+                          this.setState({ comment: e.target.value })
+                        }
+                        onSubmit={this.onSubmitComment}
+                        value={this.state.comment}
+                      />
+                    }
                   />
-                }
-              />
+                </TabPane>
+                <TabPane
+                  tab="Interview Requests"
+                  key="requests"
+                  disabled
+                ></TabPane>
+              </Tabs>
             </Card>
           </Col>
         </Row>
