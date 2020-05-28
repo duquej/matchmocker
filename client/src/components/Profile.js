@@ -17,6 +17,7 @@ import Axios from "axios";
 import { CheckCircleOutlined } from "@ant-design/icons";
 import "./Profile.css";
 import ReportModal from "./ReportModal";
+import moment from "moment";
 
 const { TextArea } = Input;
 
@@ -40,6 +41,7 @@ const CommentList = ({ comments }) => (
           />
         }
         content={<p>{item.comment}</p>}
+        datetime={moment(item.timestamp).fromNow()}
       />
     )}
   />
@@ -140,6 +142,7 @@ class Profile extends Component {
                 submittedProfilePic: this.props.profilePic,
                 submittedByGoogleID: this.props.googleID,
                 comment: <p>{this.state.comment}</p>,
+                datetime: Date.now(),
               },
               ...this.state.comments,
             ],

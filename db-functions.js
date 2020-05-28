@@ -22,24 +22,39 @@ async function returnUserFromUserID(userID) {
 }
 
 async function handleUserLogin(id, displayName, profilePicLink, email) {
-  const userRef = await db.collection("users").doc(id);
-  userRef
-    .set(
-      {
-        username: displayName,
-        googleID: id,
-        profilePic: profilePicLink,
-        email: email,
-        group: "Member",
-      },
-      { merge: true }
-    )
-    .then((res) => {
-      console.log("Addded user to database.");
-    })
-    .catch((err) => {
-      console.log("An error has occured trying to add a user to the database.");
-    });
+  const userRef = db.collection("users").doc(id);
+
+  const doesDocExist = await userRef.get().then((res) => {
+    if (res && res.exists) {
+      return true;
+    } else {
+      return false;
+    }
+  });
+
+  if (doesDocExist === true) {
+    return true;
+  } else {
+    userRef
+      .set(
+        {
+          username: displayName,
+          googleID: id,
+          profilePic: profilePicLink,
+          email: email,
+          group: "Member",
+        },
+        { merge: true }
+      )
+      .then((res) => {
+        console.log("Addded user to database.");
+      })
+      .catch((err) => {
+        console.log(
+          "An error has occured trying to add a user to the database."
+        );
+      });
+  }
 }
 
 async function handleNewReport(
@@ -169,7 +184,8 @@ async function getProfileComments(googleID) {
   const profileRef = db
     .collection("profiles")
     .doc(googleID)
-    .collection("comments");
+    .collection("comments")
+    .orderBy("timestamp");
   return await profileRef.get().then((querySnapshot) => {
     return querySnapshot.docs.map((doc) => {
       return doc.data();
@@ -318,6 +334,7 @@ async function handleNewComment(
       submittedByGoogleID: submittedByGoogleID,
       submittedByName: submittedByName,
       submittedProfilePic: submittedProfilePic,
+      timestamp: Date.now(),
     })
     .then((data) => {
       return true;
