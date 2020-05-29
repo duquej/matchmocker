@@ -1,10 +1,13 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import {
   Descriptions,
   Button,
   Divider,
   message as Message,
   Popconfirm,
+  PageHeader,
+  Tag,
 } from "antd";
 import Axios from "axios";
 
@@ -55,7 +58,11 @@ class DisplayRequest extends Component {
             bordered={false}
           >
             <Descriptions.Item label="Acceptor">
-              {this.state.accepterName}
+              <Link
+                to={`/dashboard/profile?googleID=${this.state.accepterGoogleID}`}
+              >
+                {this.state.accepterName}
+              </Link>
             </Descriptions.Item>
             <Descriptions.Item label="Acceptor Email">
               {this.state.accepterEmail}
@@ -132,6 +139,7 @@ class DisplayRequest extends Component {
   render() {
     let button;
     let title;
+    let tags;
     if (
       !(this.props.googleID === this.state.userPostedGoogleID) &&
       this.state.fullfilled === false
@@ -148,35 +156,46 @@ class DisplayRequest extends Component {
           <Button type="primary">Accept Request</Button>
         </Popconfirm>
       );
-      title = `[Pending] Interview Request`;
+      tags = <Tag color="red">Pending</Tag>;
     } else if (
       this.props.googleID === this.state.userPostedGoogleID &&
       this.state.fullfilled === false
     ) {
-      title = `[Pending] Interview Request`;
+      tags = <Tag color="red">Pending</Tag>;
     } else if (
       this.props.googleID === this.state.userPostedGoogleID &&
       this.state.fullfilled === true &&
       this.state.completed == false
     ) {
-      title = `[Accepted] Interview Request`;
+      tags = <Tag color="blue">Accepted</Tag>;
+
       button = (
         <Button type="primary" onClick={() => this.onCompletion()}>
           Mark as Completed
         </Button>
       );
     } else {
-      title = `[Completed] Interview Request`;
+      tags = <Tag color="green">Completed</Tag>;
     }
 
     let loadDisplay;
 
     if (this.state.loading === false) {
       loadDisplay = (
-        <div>
-          <Descriptions title={title} layout="vertical" bordered={false}>
+        <PageHeader
+          title={`Interview Requested`}
+          extra={[button]}
+          tags={tags}
+          subTitle=""
+          onBack={() => <Link to="/dashboard/listings"></Link>}
+        >
+          <Descriptions layout="vertical" bordered={false}>
             <Descriptions.Item label="Name">
-              {this.state.userName}
+              <Link
+                to={`/dashboard/profile?googleID=${this.state.userPostedGoogleID}`}
+              >
+                {this.state.userName}
+              </Link>
             </Descriptions.Item>
             <Descriptions.Item label="Introduction" span={2}>
               {this.state.introduction}
@@ -194,9 +213,7 @@ class DisplayRequest extends Component {
             </Descriptions.Item>
           </Descriptions>
           {this.getAcceptedInfo(this.state.fullfilled)}
-          <Divider></Divider>
-          <div>{button}</div>
-        </div>
+        </PageHeader>
       );
     } else loadDisplay = <h1></h1>;
 

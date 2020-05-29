@@ -22,7 +22,7 @@ import MySettings from "./components/MySettings";
 import Profile from "./components/Profile";
 
 const { SubMenu } = Menu;
-const { Header, Content, Sider } = Layout;
+const { Header, Content, Sider, Footer } = Layout;
 
 const Dashboard = () => {
   const [selected, setSelected] = useState("All");
@@ -69,7 +69,7 @@ const Dashboard = () => {
             mode="inline"
             defaultSelectedKeys={[pathnameSider || "/dashboard"]}
             defaultOpenKeys={["sub1"]}
-            //theme="dark"
+            theme="light"
             style={{ height: "100%", borderRight: 0 }}
           >
             <SubMenu
@@ -96,7 +96,7 @@ const Dashboard = () => {
             </SubMenu>
           </Menu>
         </Sider>
-        <Layout style={{ padding: "0 24px 24px" }}>
+        <Layout style={{ padding: "24px 24px 24px" }}>
           <Content
             className="site-layout-background"
             style={{
